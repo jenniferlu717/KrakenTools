@@ -269,8 +269,9 @@ def main():
     #Print line for unclassified reads
     o_file.write("%0.4f\t" % (float(u_reads[0])/float(total_reads[0])*100))
     for i in u_reads:
-        o_file.write("%i\t" % u_reads[i])
-        o_file.write("%i\t" % u_reads[i])
+        if if i == 0 or (i > 0 and not args.c_only):
+            o_file.write("%i\t" % u_reads[i])
+            o_file.write("%i\t" % u_reads[i])
     o_file.write("U\t0\tunclassified\n")
     #Print for all remaining reads 
     all_nodes = [root_node]
