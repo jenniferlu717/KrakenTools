@@ -47,10 +47,11 @@ taxonomy ID. Additional options are specified below.
 3. PAIRED INPUT/OUTPUT
     
     Users that ran Kraken using paired reads should input both read files into extract_kraken_reads.py as follows:
-        ./extract\_kraken\_reads.py -k myfile.kraken -s1 read1.fq -s2 reads2.fq
+        
+    `extract_kraken_reads.py -k myfile.kraken -s1 read1.fq -s2 reads2.fq`
 
 
-4. --include-parents/--include-children flags
+4. `--include-parents`/`--include-children` flags
     
     By default, only reads classified exactly at the specified taxonomy IDs
     will be extracted. Options --include-children and --include parents can be
@@ -117,12 +118,12 @@ This program takes a Kraken report file and prints out a krona-compatible TEXT f
 1. USAGE/OPTIONS
     
     `python kreport2krona.py`
-    *    `-r/--report ................`Kraken report file 
-    *    `-o/--output ................`Output Krona text file
+    *    `-r/--report MYFILE.KREPORT........`Kraken report file 
+    *    `-o/--output MYFILE.KRONA..........`Output Krona text file
     
     Optional:
-    *    `--no-intermediate-ranks.....`only output standard levels [D,P,C,O,F,G,S] 
-    *    `--intermediate-ranks........`[default] include non-standard levels
+    *    `--no-intermediate-ranks...........`only output standard levels [D,P,C,O,F,G,S] 
+    *    `--intermediate-ranks..............`[default] include non-standard levels
 
 2. EXAMPLE USAGE 
     
@@ -133,3 +134,67 @@ This program takes a Kraken report file and prints out a krona-compatible TEXT f
     
     Krona information: see https://github.com/marbl/Krona. 
 
+## filter\_bracken\_out.py
+
+This program takes the output file of a Bracken report and filters the desired taxonomy IDs. 
+
+1. USAGE/OPTIONS
+    
+    `python filter_bracken_out.py`
+    *   `-i/--input MYFILE.BRACKEN..........`Bracken output file
+    *   `-o/--output MYFILE.BRACKEN_NEW.....`Bracken-style output file with filtered taxids
+    *   `--include TID TID2.................`taxonomy IDs to include in output file [space-delimited]
+    *   `--exclude TID TID2.................`taxonomy IDs to exclude in output file [space-delimited]
+
+    User should specify either taxonomy IDs with `--include` or `--exclude`. If
+    both are specified, taxonomy IDs should not be in both lists and only
+    taxonomies to include will be evaluated. 
+    
+    When specifying the --include flag, only lines for the included taxonomy
+    IDs will be extracted to the filtered output file. The percentages in the
+    filtered file will be re-calculated so the total percentage in the output 
+    file will sum to 100%. 
+
+    When specifying the --exclude flag alone, all lines in the Bracken file
+    will be preserved EXCEPT for the lines matching taxonomy IDs provided. 
+    
+2. EXAMPLES
+    This program can be useful for isolating a subset of species to 
+    better understand the distribution of those particular species in the sample. 
+    
+    For example:
+
+    * `python filter_bracken_out.py [options] --include 1764 1769 1773 1781
+      39689` will allow users to get the relative percentages of _Mycobacterium
+      avium, marinum, tuberculosis, leprae, and gallinarum_ in their samples.
+
+    In other cases, users may want to focus on the distribution of all species
+    that are NOT the host species in a given sample. This program can then
+    recalculate percentage distributions for species when excluding reads for
+    the host.
+    
+    For example, given this output:
+        
+        name                     tax_id      tax_lvl     kraken....  added...   new.... fraction...
+        Homo sapiens             9606        S           ...         ....       999000  0.999000
+        Streptococcus pyogenes   1314        S           ...         ....       10      0.000001
+        Streptococcus agalactiae 1311        S           ...         ....       5       0.000000
+        Streptococcus pneumoniae 1313        S           ...         ....       3       0.000000
+        Bordetella pertussis     520         S           ...         ....       20      0.000002
+        ...
+    
+    Users may not be interested in the 999,000 reads that are host DNA, but
+    would rather know the percentage of non-host reads for each of the non-host
+    species.  Using `python filter_bracken_out.py [options] --exclude 9606`
+    allows better resolution of the non-host species, allowing each of the
+    fraction of reads to be recalculated out of 1,000 instead of 1,000,000
+    reads in the above example. The output would then be:
+
+        name                     tax_id      tax_lvl     kraken....  added...   new.... fraction...
+        Streptococcus pyogenes   1314        S           ...         ....       10      0.01000
+        Streptococcus agalactiae 1311        S           ...         ....       5       0.05000
+        Streptococcus pneumoniae 1313        S           ...         ....       3       0.03000
+        Bordetella pertussis     520         S           ...         ....       200     0.20000
+        ...
+    
+ 
