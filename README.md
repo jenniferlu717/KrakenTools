@@ -30,9 +30,9 @@ taxonomy ID. Additional options are specified below.
     *   -t, --taxid         TID TID2 etc........list of taxonomy IDs to extract (separated by spaces)        
 
     Optional:
-    *   -r, --report        MYFILE.KREPORT......Kraken report file (required if specifying --include-children or --include-parents)
-    *   --include-children......................include reads classified at more specific levels than specified taxonomy ID levels. 
-    *   --include-parents.......................include reads classified at all taxonomy levels between root and the specified taxonomy ID levels.
+    *   `-r, --report        MYFILE.KREPORT......`Kraken report file (required if specifying --include-children or --include-parents)
+    *   `--include-children......................`include reads classified at more specific levels than specified taxonomy ID levels. 
+    *   `--include-parents.......................`include reads classified at all taxonomy levels between root and the specified taxonomy ID levels.
     *   --max               #...................maximum number of reads to save.
     *   --append................................if output file exists, appends reads
     *   --noappend..............................[default] rewrites existing output file
@@ -71,12 +71,12 @@ taxonomy ID. Additional options are specified below.
         0.05    50      50      S1      316401                        Escherichia coli ETEC
 
     
-    1.  `/extract\_kraken\_reads.py  [options] -t 562` ==> 850 reads classified as _E. coli_ will be extracted
-    2.  `/extract\_kraken\_reads.py  [options] -t 562 --include-parents` ==> 900 reads classified as _E. coli_ or Bacteria will be extracted
-    3.  `/extract\_kraken\_reads.py  [options] -t 562 --include-children` ==> 950 reads classified as _E. coli_, _E. coli C_, or _E. coli ETEC_ will be extracted
-    4.  `/extract\_kraken\_reads.py  [options] -t 498388` ==> 50 reads classified as _E. coli C_ will be extracted
-    5.  `/extract\_kraken\_reads.py  [options] -t 498388 --include-parents` ==> 950 reads classified as _E. coli C_, _E. coli_, or Bacteria will be extracted
-    6.  `extract\_kraken\_reads.py  [options] -t 1 --include-children` ==> All classified reads will be extracted 
+    1.  `extract_kraken_reads.py  [options] -t 562` ==> 850 reads classified as _E. coli_ will be extracted
+    2.  `extract_kraken_reads.py  [options] -t 562 --include-parents` ==> 900 reads classified as _E. coli_ or Bacteria will be extracted
+    3.  `extract_kraken_reads.py  [options] -t 562 --include-children` ==> 950 reads classified as _E. coli_, _E. coli C_, or _E. coli ETEC_ will be extracted
+    4.  `extract_kraken_reads.py  [options] -t 498388` ==> 50 reads classified as _E. coli C_ will be extracted
+    5.  `extract_kraken_reads.py  [options] -t 498388 --include-parents` ==> 950 reads classified as _E. coli C_, _E. coli_, or Bacteria will be extracted
+    6.  `extract_kraken_reads.py  [options] -t 1 --include-children` ==> All classified reads will be extracted 
 
 ## combine\_kreports.py 
 
@@ -87,6 +87,12 @@ This script combines multiple Kraken reports into a combined report file.
     python complete\_kreports.py 
     *    -r 1.KREPORT 2.KREPORT.........................Kraken-style reports to combine 
     *    -o COMBINED.KREPORT............................Output file 
+
+    Optional:
+    *   --display-headers...............................include headers describing the samples and columns [all headers start with #]
+    *   --no-headers....................................do not include headers in output
+    *   --sample-names..................................give abbreviated names for each sample [default: S1, S2, ... etc]
+    *   --only-combined.................................output uses exact same columns as a single Kraken-style report file. Only total numbers for read counts and percentages will be used. Reads from individual reports will not be included.
 
 2. OUTPUT 
     Percentage is only reported for the summed read counts, not for each individual sample. 
