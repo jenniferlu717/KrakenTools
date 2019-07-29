@@ -22,7 +22,7 @@ taxonomy ID. Additional options are specified below.
 
 1. USAGE/OPTIONS
     
-    python extract\_kraken\_reads.py
+    `python extract_kraken_reads.py`
     *   `-k, --kraken MYFILE.KRAKEN.............`Kraken output file
     *   `-s, -s1, -1, -U SEQUENCE.FILE..........`FASTA/FASTQ sequence file (may be gzipped)
     *   `-s2, -2 SEQUENCE2.FILE.................`FASTA/FASTQ sequence file (for paired reads, may be gzipped)
@@ -126,7 +126,8 @@ This program takes a Kraken report file and prints out a krona-compatible TEXT f
 
 2. EXAMPLE USAGE 
     
-        kraken2 --db KRAKEN2DB --threads THREADNUM --report MYSAMPLE.KREPORT --paired SAMPLE\_1.FASTA SAMPLE\_2.FASTA > MYSAMPLE.KRAKEN2
+        kraken2 --db KRAKEN2DB --threads THREADNUM --report MYSAMPLE.KREPORT \
+            --paired SAMPLE\_1.FASTA SAMPLE\_2.FASTA > MYSAMPLE.KRAKEN2
         python kreport2krona.py -r MYSAMPLE.KREPORT -o MYSAMPLE.krona 
         ktImportText MYSAMPLE.krona -o MYSAMPLE.krona.html
     
