@@ -7,7 +7,7 @@ if using Kraken-Tools with any of the listed programs.
 
 # Running Scripts:
 No installation required. 
-All scripts are scripts that are run on the command line as follows.
+All scripts are run on the command line as described.
 
 Users can make scripts executable by running
 
