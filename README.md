@@ -23,19 +23,19 @@ taxonomy ID. Additional options are specified below.
 1. USAGE/OPTIONS
     
     python extract\_kraken\_reads.py
-    *   -k, --kraken,       MYFILE.KRAKEN.......Kraken output file
-    *   -s, -s1, -1, -U     SEQUENCE.FILE.......FASTA/FASTQ sequence file (may be gzipped)
-    *   -s2, -2             SEQUENCE2.FILE......FASTA/FASTQ sequence file (for paired reads, may be gzipped)
-    *   -o, --output        OUTPUT.FASTA........output FASTA file with extracted seqs
-    *   -t, --taxid         TID TID2 etc........list of taxonomy IDs to extract (separated by spaces)        
+    *   `-k, --kraken MYFILE.KRAKEN.............`Kraken output file
+    *   `-s, -s1, -1, -U SEQUENCE.FILE..........`FASTA/FASTQ sequence file (may be gzipped)
+    *   `-s2, -2 SEQUENCE2.FILE.................`FASTA/FASTQ sequence file (for paired reads, may be gzipped)
+    *   `-o, --output OUTPUT.FASTA..............`output FASTA file with extracted seqs
+    *   `-t, --taxid TID TID2 etc...............`list of taxonomy IDs to extract (separated by spaces)        
 
     Optional:
-    *   `-r, --report        MYFILE.KREPORT......`Kraken report file (required if specifying --include-children or --include-parents)
+    *   `-r, --report MYFILE.KREPORT.............`Kraken report file (required if specifying --include-children or --include-parents)
     *   `--include-children......................`include reads classified at more specific levels than specified taxonomy ID levels. 
     *   `--include-parents.......................`include reads classified at all taxonomy levels between root and the specified taxonomy ID levels.
-    *   --max               #...................maximum number of reads to save.
-    *   --append................................if output file exists, appends reads
-    *   --noappend..............................[default] rewrites existing output file
+    *   `--max #.................................`maximum number of reads to save.
+    *   `--append................................`if output file exists, appends reads
+    *   `--noappend..............................`[default] rewrites existing output file
     
 2. INPUT FILES: SEQUENCE FILES
 
@@ -84,31 +84,31 @@ This script combines multiple Kraken reports into a combined report file.
 
 1. USAGE/OPTIONS
     
-    python complete\_kreports.py 
-    *    -r 1.KREPORT 2.KREPORT.........................Kraken-style reports to combine 
-    *    -o COMBINED.KREPORT............................Output file 
+    `python complete_kreports.py`
+    *    `-r 1.KREPORT 2.KREPORT........................`Kraken-style reports to combine 
+    *    `-o COMBINED.KREPORT...........................`Output file 
 
     Optional:
-    *   --display-headers...............................include headers describing the samples and columns [all headers start with #]
-    *   --no-headers....................................do not include headers in output
-    *   --sample-names..................................give abbreviated names for each sample [default: S1, S2, ... etc]
-    *   --only-combined.................................output uses exact same columns as a single Kraken-style report file. Only total numbers for read counts and percentages will be used. Reads from individual reports will not be included.
+    *   `--display-headers..............................`include headers describing the samples and columns [all headers start with #]
+    *   `--no-headers...................................`do not include headers in output
+    *   `--sample-names.................................`give abbreviated names for each sample [default: S1, S2, ... etc]
+    *   `--only-combined................................`output uses exact same columns as a single Kraken-style report file. Only total numbers for read counts and percentages will be used. Reads from individual reports will not be included.
 
 2. OUTPUT 
     Percentage is only reported for the summed read counts, not for each individual sample. 
 
     The output file therefore contains the following tab-delimited columns:
-    *    perc............percentage of total reads rooted at this clade 
-    *    tot\_all .......total reads rooted at this clade (including reads at more specific clades) 
-    *    tot\_lvl........total reads at this clade  (not including reads at more specific clades)
-    *    1\_all..........reads from Sample 1 rooted at this clade 
-    *    1\_lvl..........reads from Sample 1 at this clade 
-    *    2\_all..........""
-    *    2\_lvl..........""
+    *    `perc............`percentage of total reads rooted at this clade 
+    *    `tot_all ........`total reads rooted at this clade (including reads at more specific clades) 
+    *    `tot_lvl.........`total reads at this clade  (not including reads at more specific clades)
+    *    `1_all...........`reads from Sample 1 rooted at this clade 
+    *    `1_lvl...........`reads from Sample 1 at this clade 
+    *    `2_all...........`""
+    *    `2_lvl...........`""
     *    etc..
-    *    lvl\_type.......Clade level type (R, D, P, C, O, F, G, S....) 
-    *    taxid..........taxonomy ID of this clade
-    *    name...........name of this clade 
+    *    `lvl_type........`Clade level type (R, D, P, C, O, F, G, S....) 
+    *    `taxid...........`taxonomy ID of this clade
+    *    `name............`name of this clade 
 
 ## kreport2krona.py 
 
@@ -116,20 +116,19 @@ This program takes a Kraken report file and prints out a krona-compatible TEXT f
 
 1. USAGE/OPTIONS
     
-    python kreport2krona.py
-    *    -r/--report ................Kraken report file 
-    *    -o/--output ................Output Krona text file
+    `python kreport2krona.py`
+    *    `-r/--report ................`Kraken report file 
+    *    `-o/--output ................`Output Krona text file
     
     Optional:
-    *    --no-intermediate-ranks.....only output standard levels [D,P,C,O,F,G,S] 
-    *    --intermediate-ranks........[default] include non-standard levels
+    *    `--no-intermediate-ranks.....`only output standard levels [D,P,C,O,F,G,S] 
+    *    `--intermediate-ranks........`[default] include non-standard levels
 
 2. EXAMPLE USAGE 
     
-    kraken2 --db KRAKEN2DB --threads THREADNUM --report MYSAMPLE.KREPORT 
-        --paired SAMPLE\_1.FASTA SAMPLE\_2.FASTA > MYSAMPLE.KRAKEN2
-    python kreport2krona.py -r MYSAMPLE.KREPORT -o MYSAMPLE.krona 
-    ktImportText MYSAMPLE.krona -o MYSAMPLE.krona.html
+        kraken2 --db KRAKEN2DB --threads THREADNUM --report MYSAMPLE.KREPORT --paired SAMPLE\_1.FASTA SAMPLE\_2.FASTA > MYSAMPLE.KRAKEN2
+        python kreport2krona.py -r MYSAMPLE.KREPORT -o MYSAMPLE.krona 
+        ktImportText MYSAMPLE.krona -o MYSAMPLE.krona.html
     
     Krona information: see https://github.com/marbl/Krona. 
 
