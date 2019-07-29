@@ -257,7 +257,7 @@ def main():
             o_file.write("%s\t" % id2names[i])
             o_file.write("%s\n" % id2files[i])
     #Report columns
-    o_file.write("perc\ttot_all\ttot_lvl")
+    o_file.write("#perc\ttot_all\ttot_lvl")
     if not args.c_only:
         for i in id2names:
             o_file.write("\t%s_all" % i)
@@ -269,7 +269,7 @@ def main():
     #Print line for unclassified reads
     o_file.write("%0.4f\t" % (float(u_reads[0])/float(total_reads[0])*100))
     for i in u_reads:
-        if if i == 0 or (i > 0 and not args.c_only):
+        if i == 0 or (i > 0 and not args.c_only):
             o_file.write("%i\t" % u_reads[i])
             o_file.write("%i\t" % u_reads[i])
     o_file.write("U\t0\tunclassified\n")
