@@ -127,7 +127,7 @@ This program takes a Kraken report file and prints out a krona-compatible TEXT f
 2. EXAMPLE USAGE 
     
         kraken2 --db KRAKEN2DB --threads THREADNUM --report MYSAMPLE.KREPORT \
-            --paired SAMPLE\_1.FASTA SAMPLE\_2.FASTA > MYSAMPLE.KRAKEN2
+            --paired SAMPLE_1.FASTA SAMPLE_2.FASTA > MYSAMPLE.KRAKEN2
         python kreport2krona.py -r MYSAMPLE.KREPORT -o MYSAMPLE.krona 
         ktImportText MYSAMPLE.krona -o MYSAMPLE.krona.html
     
