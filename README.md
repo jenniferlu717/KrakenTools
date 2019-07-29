@@ -1,5 +1,5 @@
 # Kraken Tools
-For news and updates, refer to the github page: https://github.com/jennifer.lu717/Kraken-Tools/
+For news and updates, refer to the github page: https://github.com/jenniferlu717/KrakenTools/
 
 Kraken-Tools is a suite of scripts to be used for post-analysis of 
 Kraken/KrakenUniq/Kraken2/Bracken results. Please cite the relevant paper
@@ -39,10 +39,10 @@ taxonomy ID. Additional options are specified below.
     
 2. INPUT FILES: SEQUENCE FILES
 
-        Input sequence files must be either FASTQ or FASTA files. Input files
-        can be gzipped or not. The program will automatically detect whether
-        the file is gzipped and whether it is FASTQ or FASTA formatted based on
-        the first character in the file (">" for FASTA, "@" for FASTQ)
+    Input sequence files must be either FASTQ or FASTA files. Input files
+    can be gzipped or not. The program will automatically detect whether
+    the file is gzipped and whether it is FASTQ or FASTA formatted based on
+    the first character in the file (">" for FASTA, "@" for FASTQ)
 
 3. PAIRED INPUT/OUTPUT
     
@@ -71,12 +71,12 @@ taxonomy ID. Additional options are specified below.
         0.05    50      50      S1      316401                        Escherichia coli ETEC
 
     
-    1.  ./extract\_kraken\_reads.py  [options] -t 562 ==> 850 reads classified as _E. coli_ will be extracted
-    2.  ./extract\_kraken\_reads.py  [options] -t 562 --include-parents ==> 900 reads classified as _E. coli_ or Bacteria will be extracted
-    3.  ./extract\_kraken\_reads.py  [options] -t 562 --include-children ==> 950 reads classified as _E. coli_, _E. coli C_, or _E. coli ETEC_ will be extracted
-    4.  ./extract\_kraken\_reads.py  [options] -t 498388 ==> 50 reads classified as _E. coli C_ will be extracted
-    5.  ./extract\_kraken\_reads.py  [options] -t 498388 --include-parents ==> 950 reads classified as _E. coli C_, _E. coli_, or Bacteria will be extracted
-    6.  ./extract\_kraken\_reads.py  [options] -t 1 --include-children ==> All classified reads will be extracted 
+    1.  `/extract\_kraken\_reads.py  [options] -t 562` ==> 850 reads classified as _E. coli_ will be extracted
+    2.  `/extract\_kraken\_reads.py  [options] -t 562 --include-parents` ==> 900 reads classified as _E. coli_ or Bacteria will be extracted
+    3.  `/extract\_kraken\_reads.py  [options] -t 562 --include-children` ==> 950 reads classified as _E. coli_, _E. coli C_, or _E. coli ETEC_ will be extracted
+    4.  `/extract\_kraken\_reads.py  [options] -t 498388` ==> 50 reads classified as _E. coli C_ will be extracted
+    5.  `/extract\_kraken\_reads.py  [options] -t 498388 --include-parents` ==> 950 reads classified as _E. coli C_, _E. coli_, or Bacteria will be extracted
+    6.  `extract\_kraken\_reads.py  [options] -t 1 --include-children` ==> All classified reads will be extracted 
 
 ## combine\_kreports.py 
 
@@ -103,8 +103,6 @@ This script combines multiple Kraken reports into a combined report file.
     *    lvl\_type.......Clade level type (R, D, P, C, O, F, G, S....) 
     *    taxid..........taxonomy ID of this clade
     *    name...........name of this clade 
-## kreport2mpa.py  
-
 
 ## kreport2krona.py 
 

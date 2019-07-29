@@ -143,10 +143,10 @@ def main():
         help='Output kraken report file with combined information')
     parser.add_argument('--display-headers',required=False,dest='headers',
         action='store_true', default=True,
-        help='Include header lines mapping samples to abbreviated names')
+        help='Include header lines')
     parser.add_argument('--no-headers',required=False,dest='headers',
         action='store_false',default=True,
-        help='Do not include header lines mapping samples to abbreviated names')
+        help='Do not include header lines')
     parser.add_argument('--sample-names',required=False,nargs='+',
         dest='s_names',default=[],help='Sample names to use as headers in the new report')
     parser.add_argument('--only-combined', required=False, dest='c_only',
