@@ -158,7 +158,8 @@ This program takes the output file of a Bracken report and filters the desired t
     When specifying the --exclude flag alone, all lines in the Bracken file
     will be preserved EXCEPT for the lines matching taxonomy IDs provided. 
     
-2. EXAMPLES
+2. EXAMPLE USAGE
+
     This program can be useful for isolating a subset of species to 
     better understand the distribution of those particular species in the sample. 
     
