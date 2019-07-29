@@ -149,6 +149,9 @@ def main():
         help='Do not include header lines mapping samples to abbreviated names')
     parser.add_argument('--sample-names',required=False,nargs='+',
         dest='s_names',default=[],help='Sample names to use as headers in the new report')
+    parser.add_argument('--only-combined', required=False, dest='c_only',
+        action='store_true', default=False, 
+        help='Include only the total combined reads column, not the individual sample cols')
     args=parser.parse_args()
     
 
@@ -255,9 +258,10 @@ def main():
             o_file.write("%s\n" % id2files[i])
     #Report columns
     o_file.write("perc\ttot_all\ttot_lvl")
-    for i in id2names:
-        o_file.write("\t%s_all" % i)
-        o_file.write("\t%s_lvl" % i)
+    if not args.c_only:
+        for i in id2names:
+            o_file.write("\t%s_all" % i)
+            o_file.write("\t%s_lvl" % i)
     o_file.write("\tlvl_type\ttaxid\tname\n")
     #################################################
     #STEP 3: PRINT TREE
@@ -284,12 +288,13 @@ def main():
         o_file.write("%0.4f\t" % (float(curr_node.tot_all)/float(total_reads[0])*100))
         o_file.write("%i\t" % curr_node.tot_all)
         o_file.write("%i\t" % curr_node.tot_lvl)
-        for i in range(num_samples):
-            if (i+1) not in curr_node.all_reads: 
-                o_file.write("0\t0\t")
-            else:
-                o_file.write("%i\t" % curr_node.all_reads[i+1])
-                o_file.write("%i\t" % curr_node.lvl_reads[i+1])
+        if not args.c_only:
+            for i in range(num_samples):
+                if (i+1) not in curr_node.all_reads: 
+                    o_file.write("0\t0\t")
+                else:
+                    o_file.write("%i\t" % curr_node.all_reads[i+1])
+                    o_file.write("%i\t" % curr_node.lvl_reads[i+1])
         o_file.write("%s\t" % curr_node.level_id)
         o_file.write("%s\t" % curr_node.taxid)
         o_file.write(" "*curr_node.level_num*2)
