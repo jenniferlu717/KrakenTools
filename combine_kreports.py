@@ -202,7 +202,7 @@ def main():
             total_reads[0] += level_reads
             total_reads[count_samples] = level_reads 
             #Unclassified 
-            if level_id == 'U':
+            if level_id == 'U' or taxid == '0':
                 u_reads[0] += level_reads
                 u_reads[count_samples] = level_reads 
                 continue
