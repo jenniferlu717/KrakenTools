@@ -248,21 +248,21 @@ def main():
     #STEP 2: SETUP OUTPUT FILE
     sys.stdout.write(">>STEP 2: WRITING NEW REPORT HEADERS\n")
     o_file = open(args.output,'w') 
-    o_file.write("#Number of Samples: %i\n" % num_samples) 
-    o_file.write("#Total Number of Reads: %i\n" % total_reads[0])
     #Lines mapping sample ids to filenames
     if args.headers: 
+        o_file.write("#Number of Samples: %i\n" % num_samples) 
+        o_file.write("#Total Number of Reads: %i\n" % total_reads[0])
         for i in id2names:
             o_file.write("#")
             o_file.write("%s\t" % id2names[i])
             o_file.write("%s\n" % id2files[i])
-    #Report columns
-    o_file.write("#perc\ttot_all\ttot_lvl")
-    if not args.c_only:
-        for i in id2names:
-            o_file.write("\t%s_all" % i)
-            o_file.write("\t%s_lvl" % i)
-    o_file.write("\tlvl_type\ttaxid\tname\n")
+        #Report columns
+        o_file.write("#perc\ttot_all\ttot_lvl")
+        if not args.c_only:
+            for i in id2names:
+                o_file.write("\t%s_all" % i)
+                o_file.write("\t%s_lvl" % i)
+        o_file.write("\tlvl_type\ttaxid\tname\n")
     #################################################
     #STEP 3: PRINT TREE
     sys.stdout.write(">>STEP 3: PRINTING REPORT\n")
