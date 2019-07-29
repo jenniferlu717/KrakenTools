@@ -157,6 +157,7 @@ def main():
 
     #Initialize combined values 
     main_lvls = ['U','R','D','K','P','C','O','F','G','S']
+    map_lvls = {'kingdom':'K', 'superkingdom':'D','phylum':'P','class':'C','order':'O','family':'F','genus':'G','species':'G'}
     count_samples = 0
     num_samples = len(args.r_files)
     sample_names = args.s_names
@@ -201,6 +202,8 @@ def main():
             if len(report_vals) < 5:
                 continue
             [name, taxid, level_num, level_id, all_reads, level_reads] = report_vals
+            if level_id in map_lvls:
+                level_id = map_lvls[level_id]
             #Total reads 
             total_reads[0] += level_reads
             total_reads[count_samples] = level_reads 
