@@ -138,6 +138,10 @@ def main():
         help='Taxonomy ID[s] of reads to extract (space-delimited)')
     parser.add_argument('-o', dest='output_file', required=True,
         help='Output FASTA file containing the reads and sample IDs')
+    parser.add_argument('-o2', dest='output_file2', required=False, default='',
+        help='If specified, contains the 2nd pair of reads') 
+    parser.add_argument('-d', '--delimiter', dest='delim', required=False, default='N',
+        help='For paired reads, concatenate using specified delimiter')
     parser.add_argument('--append', dest='append', action='store_true',
         help='Append the sequences to the end of the output FASTA file specified.')
     parser.add_argument('--noappend', dest='append', action='store_false',
@@ -248,6 +252,7 @@ def main():
     sys.stdout.flush()
     #Evaluate each sample in the kraken file
     save_readids = {}
+    save_readids2 = {} 
     for line in k_file:
         count_kraken += 1
         if (count_kraken % 10000 == 0):
@@ -259,6 +264,7 @@ def main():
         #Skip if reads are human/artificial/synthetic
         if (tax_id in save_taxids):
             save_taxids[tax_id] += 1
+            save_readids2[read_id] = 0
             save_readids[read_id] = 0 
         if len(save_readids) >= args.max_reads:
             break 
@@ -329,9 +335,12 @@ def main():
                 count_output+=1
                 sys.stdout.write('\r\t%i read IDs found (%i reads processed)' % (count_output, count_seqs))
                 sys.stdout.flush()
-                new_sequence = str(save_readids[record.id].seq) + "X" + str(record.seq)
-                new_record = SeqRecord(Seq(new_sequence),id=record.id) 
-                save_readids[record.id] = new_record
+                if args.output_file2 != '':
+                    save_readids2[record.id] = record
+                else:
+                    new_sequence = str(save_readids[record.id].seq) + args.delimiter + str(record.seq)
+                    new_record = SeqRecord(Seq(new_sequence),id=record.id) 
+                    save_readids[record.id] = new_record
             #If no more reads to find 
             if len(save_readids) == count_output:
                 break
@@ -342,15 +351,23 @@ def main():
     #Open output file
     if (args.append):
         o_file = open(args.output_file, 'a')
+        if args.output_file2 != '':
+            o_file2 = open(args.output_file2, 'a')
     else:
         o_file = open(args.output_file, 'w')
+        if args.output_file2 != '':
+            o_file2 = open(args.output_file2, 'w')
     for i in save_readids:
         SeqIO.write(save_readids[i], o_file, "fasta")
+        if args.output_file2 != '':
+            SeqIO.write(save_readids2[i], o_file2, "fasta")
     #End Program
     sys.stdout.write('\t' + str(count_output) + ' reads printed to file\n')
     sys.stdout.write('\tGenerated file: %s\n' % args.output_file)
     
     o_file.close()
+    if args.output_file2 != '':
+        o_file2.close()
     
     #End of program
     time = strftime("%m-%d-%Y %H:%M:%S", gmtime())

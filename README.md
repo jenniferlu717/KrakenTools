@@ -46,10 +46,22 @@ taxonomy ID. Additional options are specified below.
 
 3. PAIRED INPUT/OUTPUT
     
-    Users that ran Kraken using paired reads should input both read files into extract_kraken_reads.py as follows:
+    Users that ran Kraken using paired reads should input both read files into
+    extract_kraken_reads.py as follows:
         
     `extract_kraken_reads.py -k myfile.kraken -s1 read1.fq -s2 reads2.fq`
+    
+    By default, extracted paired reads will be output concatenated with 'N'.
+    However, users have the option to specify a different delimiter using the
+    `--delimiter` or `-d` option:
+    
+    `extract_kraken_reads.py -k myfile.kraken -s1 read1.fq -s2 reads2.fq -d X`
+    
+    Users may also get non-concatenated reads by specifying a second output
+    file. If a 2nd output file is provided, any delimiter will be ignored and
+    the individual pairs will be preserved in two separate files:
 
+    `extract_kraken_reads.py -k myfile.kraken ... -o reads_S1.fa -o2 reads_s2.fa`
 
 4. `--include-parents`/`--include-children` flags
     
