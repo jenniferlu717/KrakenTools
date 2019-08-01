@@ -367,6 +367,7 @@ def main():
     
     o_file.close()
     if args.output_file2 != '':
+        sys.stdout.write('\tGenerated file: %s\n' % args.output_file2)
         o_file2.close()
     
     #End of program
