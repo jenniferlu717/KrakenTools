@@ -1,9 +1,9 @@
 # Kraken Tools
 For news and updates, refer to the github page: https://github.com/jenniferlu717/KrakenTools/
 
-Kraken-Tools is a suite of scripts to be used for post-analysis of 
+KrakenTools is a suite of scripts to be used for post-analysis of 
 Kraken/KrakenUniq/Kraken2/Bracken results. Please cite the relevant paper
-if using Kraken-Tools with any of the listed programs. 
+if using KrakenTools with any of the listed programs. 
 
 # Running Scripts:
 No installation required. 
