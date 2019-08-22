@@ -130,7 +130,8 @@ def main():
             curr_path.append(level_str)
             o_file.write(str(lvl_reads) + "\t" + name + "\n")
         else:
-            o_file.write(str(lvl_reads))
+            if (level_type == "x" and args.x_include) or level_type != "x":
+                o_file.write(str(lvl_reads))
             #Move back if needed
             while level_num != (prev_lvl_num + 1):
                 prev_lvl_num -= 1
@@ -142,8 +143,8 @@ def main():
                     if (string[0] == "x" and args.x_include) or string[0] != "x":
                         if string[0] != "r": 
                             o_file.write("\t" + string)
-            #Print final level and then number of reads
-            o_file.write("\t" + level_str + "\n")
+                #Print final level and then number of reads
+                o_file.write("\t" + level_str + "\n")
             #Update
             curr_path.append(level_str)
             prev_lvl_num = level_num
