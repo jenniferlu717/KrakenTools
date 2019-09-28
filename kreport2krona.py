@@ -47,6 +47,7 @@
 ####################################################################
 import os, sys, argparse
 
+####################################################################
 #process_kraken_report
 #usage: parses a single line in the kraken report and extracts relevant information
 #input: kraken report file with the following tab delimited lines
@@ -83,28 +84,17 @@ def process_kraken_report(curr_str):
     level_num = spaces/2
     return [name, level_num, level_type, lvl_reads]
 
-#Main method
-def main():
-    #Parse arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-r', '--report-file', '--report', required=True,
-        dest='r_file', help='Input kraken report file for converting')
-    parser.add_argument('-o', '--output', required=True,
-        dest='o_file', help='Output krona-report file name')
-    parser.add_argument('--intermediate-ranks', action='store_true',
-        dest='x_include', default=False, required=False,
-        help='Include non-traditional taxonomic ranks in output')
-    parser.add_argument('--no-intermediate-ranks', action='store_false',
-        dest='x_include', default=False, required=False,
-        help='Do not include non-traditional taxonomic ranks in output [default: no intermediate ranks]')
-    args=parser.parse_args()
-
+###################################################################
+#kreport2krona_all
+#usage: prints all levels for a kraken report 
+#input: kraken report file and output krona file names 
+#returns: none 
+def kreport2krona_all(report_file, out_file):
     #Process report file and output 
     curr_path = [] 
     prev_lvl_num = -1
-    r_file = open(args.r_file, 'r')
-    o_file = open(args.o_file, 'w')
-    
+    r_file = open(report_file, 'r')
+    o_file = open(out_file, 'w')
     #Read through report file 
     main_lvls = ['D','P','C','O','F','G','S']
     for line in r_file:
@@ -128,28 +118,140 @@ def main():
             #First level
             prev_lvl_num = level_num
             curr_path.append(level_str)
-            o_file.write(str(lvl_reads) + "\t" + name + "\n")
+            o_file.write(str(lvl_reads) + "\t" + level_str + "\n")
         else:
-            if (level_type == "x" and args.x_include) or level_type != "x":
-                o_file.write(str(lvl_reads))
+            o_file.write(str(lvl_reads))
             #Move back if needed
             while level_num != (prev_lvl_num + 1):
                 prev_lvl_num -= 1
                 curr_path.pop()
-            #Print if at non-traditional level and that is requested
-            if (level_type == "x" and args.x_include) or level_type != "x":
-                #Print all ancestors of current level followed by |
-                for string in curr_path:
-                    if (string[0] == "x" and args.x_include) or string[0] != "x":
-                        if string[0] != "r": 
-                            o_file.write("\t" + string)
-                #Print final level and then number of reads
-                o_file.write("\t" + level_str + "\n")
+            #Print all ancestors of current level followed by |
+            for string in curr_path:
+                if string[0] != "r": 
+                    o_file.write("\t" + string)
+            #Print final level and then number of reads
+            o_file.write("\t" + level_str + "\n")
             #Update
             curr_path.append(level_str)
             prev_lvl_num = level_num
     o_file.close()
     r_file.close()
+    
+###################################################################
+#kreport2krona_main
+#usage: prints only main taxonomy levels for a kraken report 
+#input: kraken report file and output krona file names 
+#returns: none 
+def kreport2krona_main(report_file, out_file):
+    #Process report file and output 
+    main_lvls = ['D','P','C','O','F','G','S']
+    curr_path = [] 
+    prev_lvl_num = -1
+    num2path = {} 
+    path2reads = {} 
+    line_num = -1
+    #Read through report file 
+    r_file = open(report_file, 'r')
+    for line in r_file:
+        line_num += 1
+        #########################################
+        report_vals = process_kraken_report(line)
+        #If header line, skip
+        if len(report_vals) < 4: 
+            continue
+        #Get relevant information from the line 
+        [name, level_num, level_type, lvl_reads] = report_vals
+        if level_type == 'U':
+            num2path[line_num] = ["u_Unclassified"]
+            path2reads["u_Unclassified"] = lvl_reads 
+            continue
+        #########################################
+        #Create level name 
+        if level_type not in main_lvls:
+            level_type = "x"
+        elif level_type == "D":
+            level_type = "K"
+        level_str = level_type.lower() + "__" + name
+        #########################################
+        #Determine full string to add
+        if prev_lvl_num == -1:
+            #First level
+            prev_lvl_num = level_num
+            curr_path.append(level_str)
+            #Save
+            if curr_path[-1][0] == "x":
+                num2path[line_num] = ""
+            else:
+                path2reads[curr_path[-1]] = lvl_reads
+                num2path[line_num] = []
+                for i in curr_path:
+                    num2path[line_num].append(i)
+            continue
+        else:
+            #########################################
+            #Move back if needed
+            while level_num != (prev_lvl_num + 1):
+                prev_lvl_num -= 1
+                curr_path.pop()
+            #Update the list 
+            curr_path.append(level_str)
+            prev_lvl_num = level_num
+            #########################################
+            #IF AT NON-TRADITIONAL LEVEL, ADD TO PARENT
+            if level_type == "x":
+                test_num = len(curr_path) - 1
+                while(test_num >= 0):
+                    if curr_path[test_num][0] != "x":
+                        path2reads[curr_path[test_num]] += lvl_reads 
+                        test_num = -1
+                    test_num = test_num - 1 
+                num2path[line_num] = ""
+            #IF AT TRADITIONAL LEVEL, SAVE 
+            if level_type != "x":
+                path2reads[curr_path[-1]] = lvl_reads
+                num2path[line_num] = []
+                for i in curr_path:
+                    num2path[line_num].append(i)
+    r_file.close() 
+    
+    #WRITE OUTPUT FILE
+    o_file = open(out_file, 'w')
+    for i in range(0,line_num):
+        #Get values
+        curr_path = num2path[i] 
+        if len(curr_path) > 0:
+            curr_reads = path2reads[curr_path[-1]] 
+            o_file.write("%i" % curr_reads)
+            for name in curr_path:
+                if name[0] != "r" and name[0] != "x":
+                    o_file.write("\t%s" % name)
+            o_file.write("\n")
+    o_file.close()
 
+######################################################################
+#Main method
+def main():
+    #Parse arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-r', '--report-file', '--report', required=True,
+        dest='r_file', help='Input kraken report file for converting')
+    parser.add_argument('-o', '--output', required=True,
+        dest='o_file', help='Output krona-report file name')
+    parser.add_argument('--intermediate-ranks', action='store_true',
+        dest='x_include', default=False, required=False,
+        help='Include non-traditional taxonomic ranks in output')
+    parser.add_argument('--no-intermediate-ranks', action='store_false',
+        dest='x_include', default=False, required=False,
+        help='Do not include non-traditional taxonomic ranks in output [default: no intermediate ranks]')
+    args=parser.parse_args()
+
+    #Determine which krona report to make 
+    if args.x_include:
+        kreport2krona_all(args.r_file,args.o_file)
+    else:
+        kreport2krona_main(args.r_file,args.o_file) 
+
+#################################################################
 if __name__ == "__main__":
     main()
+#########################END OF PROGRAM##########################

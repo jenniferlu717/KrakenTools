@@ -338,7 +338,7 @@ def main():
                 if args.output_file2 != '':
                     save_readids2[record.id] = record
                 else:
-                    new_sequence = str(save_readids[record.id].seq) + args.delimiter + str(record.seq)
+                    new_sequence = str(save_readids[record.id].seq) + args.delim + str(record.seq)
                     new_record = SeqRecord(Seq(new_sequence),id=record.id) 
                     save_readids[record.id] = new_record
             #If no more reads to find 
