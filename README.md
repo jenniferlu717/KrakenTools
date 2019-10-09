@@ -30,6 +30,7 @@ taxonomy ID. Additional options are specified below.
     *   `-t, --taxid TID TID2 etc...............`list of taxonomy IDs to extract (separated by spaces)        
 
     Optional:
+    *   `--exclude...............................`Instead of finding reads matching specified taxids, finds reads NOT matching specified taxids.
     *   `-r, --report MYFILE.KREPORT.............`Kraken report file (required if specifying --include-children or --include-parents)
     *   `--include-children......................`include reads classified at more specific levels than specified taxonomy ID levels. 
     *   `--include-parents.......................`include reads classified at all taxonomy levels between root and the specified taxonomy ID levels.
@@ -62,8 +63,17 @@ taxonomy ID. Additional options are specified below.
     the individual pairs will be preserved in two separate files:
 
     `extract_kraken_reads.py -k myfile.kraken ... -o reads_S1.fa -o2 reads_s2.fa`
+4. `--exclude` flag
+    
+    By default, reads classified at specified taxonomy IDs will be extracted (and any taxids selected using `--include-parents`/`--include-children`. However, specifying `--exclude` will cause the reads NOT classified at any specified taxonomy IDs.
 
-4. `--include-parents`/`--include-children` flags
+    For example: 
+    1. `extract_kraken_reads.py -k myfile.kraken ... --taxid 9606 --exclude` ==> extract all reads NOT classified as Human (taxid 9606). 
+    2. `extract_kraken_reads.py -k myfile.kraken ... --taxid 2 --exclude --include-children` ==> extract all reads NOT classified as Bacteria (taxid 2) or any classification in the Bacteria subtree. 
+    3. `extract_kraken_reads.py -k myfile.kraken ... --taxid 9606 --exclude --include-parents` ==> extract all reads NOT classified as Human or any classification in the direct ancestry of Human (e.g. will exclude reads classified at the Primate, Chordata, or Eukaryota levels). 
+
+
+5. `--include-parents`/`--include-children` flags
     
     By default, only reads classified exactly at the specified taxonomy IDs
     will be extracted. Options --include-children and --include parents can be

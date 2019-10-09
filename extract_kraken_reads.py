@@ -160,6 +160,9 @@ def main():
     parser.add_argument('--include-children',dest='children', required=False,
         action='store_true',default=False,
         help='Include reads classified more specifically than the specified taxids')
+    parser.add_argument('--exclude', dest='exclude', required=False,
+        action='store_true',default=False,
+        help='Instead of finding reads matching specified taxids, finds all reads NOT matching specified taxids') 
     parser.set_defaults(append=False)
 
     args=parser.parse_args()
@@ -262,7 +265,11 @@ def main():
         [tax_id, read_id] = process_kraken_output(line)
         
         #Skip if reads are human/artificial/synthetic
-        if (tax_id in save_taxids):
+        if (tax_id in save_taxids) and not args.exclude:
+            save_taxids[tax_id] += 1
+            save_readids2[read_id] = 0
+            save_readids[read_id] = 0 
+        elif (taxid not in save_taxids) and args.exclude:
             save_taxids[tax_id] += 1
             save_readids2[read_id] = 0
             save_readids[read_id] = 0 
