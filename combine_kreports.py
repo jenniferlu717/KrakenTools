@@ -109,6 +109,8 @@ class Tree(object):
 #   - reads classified only at this level
 def process_kraken_report(curr_str):
     split_str = curr_str.strip().split('\t')
+    if len(split_str) < 5:
+        return []
     try:
         int(split_str[1])
     except ValueError:
