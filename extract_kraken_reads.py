@@ -107,7 +107,7 @@ def process_kraken_output(kraken_line):
 def process_kraken_report(report_line):
     l_vals = report_line.strip().split('\t')
     try:
-        int(split_str[1])
+        int(l_vals[1])
     except ValueError:
         return []
     #Extract relevant information
