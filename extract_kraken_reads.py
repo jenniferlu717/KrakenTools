@@ -316,15 +316,18 @@ def main():
     count_output = 0
     for record in SeqIO.parse(s_file1,filetype):
         count_seqs += 1
-        if record.id in save_readids:
+        test_id = str(record.id)
+        if "/1" or "/2" in test_id:
+            test_id = test_id[:-1]
+        if test_id in save_readids:
             count_output += 1
             #Print update
             sys.stdout.write('\r\t%i read IDs found (%i reads processed)' % (count_output, count_seqs))
             sys.stdout.flush()
             sequence = str(record.seq)
             #Print the read_id and the sequence to the file
-            new_record = SeqRecord(Seq(sequence),id=record.id) 
-            save_readids[record.id] = new_record
+            new_record = SeqRecord(Seq(sequence),id=test_id) 
+            save_readids[test_id] = new_record
         #If no more reads to find 
         if len(save_readids) == count_output:
             break
@@ -338,16 +341,19 @@ def main():
         count_seqs = 0
         for record in SeqIO.parse(s_file2, filetype):
             count_seqs += 1
-            if record.id in save_readids:
+            test_id = str(record.id)
+            if "/1" or "/2" in test_id:
+                test_id = test_id[:-1]
+            if test_id in save_readids:
                 count_output+=1
                 sys.stdout.write('\r\t%i read IDs found (%i reads processed)' % (count_output, count_seqs))
                 sys.stdout.flush()
                 if args.output_file2 != '':
-                    save_readids2[record.id] = record
+                    save_readids2[test_id] = record
                 else:
-                    new_sequence = str(save_readids[record.id].seq) + args.delim + str(record.seq)
-                    new_record = SeqRecord(Seq(new_sequence),id=record.id) 
-                    save_readids[record.id] = new_record
+                    new_sequence = str(save_readids[test_id].seq) + args.delim + str(record.seq)
+                    new_record = SeqRecord(Seq(new_sequence),id=test_id) 
+                    save_readids[test_id] = new_record
             #If no more reads to find 
             if len(save_readids) == count_output:
                 break
