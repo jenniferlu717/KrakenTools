@@ -187,6 +187,7 @@ def main():
         #create tree and save nodes with taxids in the list 
         base_nodes = {} 
         r_file = open(args.report_file,'r')
+        prev_node = -1
         for line in r_file:
             #extract values
             report_vals = process_kraken_report(line)
