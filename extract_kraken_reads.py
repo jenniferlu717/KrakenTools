@@ -270,7 +270,7 @@ def main():
             save_taxids[tax_id] += 1
             save_readids2[read_id] = 0
             save_readids[read_id] = 0 
-        elif (taxid not in save_taxids) and args.exclude:
+        elif (tax_id not in save_taxids) and args.exclude:
             save_taxids[tax_id] += 1
             save_readids2[read_id] = 0
             save_readids[read_id] = 0 
