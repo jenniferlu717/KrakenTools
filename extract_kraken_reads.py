@@ -82,7 +82,12 @@ class Tree(object):
 #   - read ID
 def process_kraken_output(kraken_line):
     l_vals = kraken_line.split('\t')
-    tax_id = l_vals[2]
+    if "taxid" in l_vals[2]:
+        temp = l_vals[2].split("taxid ")[-1]
+        tax_id = temp[:-1]
+    else:
+        tax_id = l_vals[2]
+
     read_id = l_vals[1]
     if (tax_id == 'A'):
         tax_id = 81077
