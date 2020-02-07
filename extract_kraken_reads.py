@@ -194,6 +194,8 @@ def main():
             if len(report_vals) == 0:
                 continue
             [taxid, level_num, level_type] = report_vals
+            if taxid == "0":
+                continue 
             #tree root
             if taxid == '1':
                 root_node = Tree(taxid, level_num, level_type)
