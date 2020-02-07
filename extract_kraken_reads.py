@@ -198,12 +198,12 @@ def main():
             report_vals = process_kraken_report(line)
             if len(report_vals) == 0:
                 continue
-            [taxid, level_num, level_type] = report_vals
+            [taxid, level_num, level_id] = report_vals
             if taxid == "0":
                 continue 
             #tree root
             if taxid == '1':
-                root_node = Tree(taxid, level_num, level_type)
+                root_node = Tree(taxid, level_num, level_id)
                 prev_node = root_node
                 #save if needed
                 if taxid in save_taxids:
@@ -220,7 +220,7 @@ def main():
                     num = int(prev_node.level_id[-1]) + 1
                     level_id = prev_node.level_id[:-1] + str(num)
             #make node
-            curr_node = Tree(taxid, level_num, level_type, None, prev_node)
+            curr_node = Tree(taxid, level_num, level_id, None, prev_node)
             prev_node.add_child(curr_node)
             prev_node = curr_node
             #save if taxid matches
