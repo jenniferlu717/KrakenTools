@@ -141,7 +141,7 @@ def main():
     parser.add_argument('-s2', '-2', dest='seq_file2', default= "",
         help='2nd FASTA/FASTQ File containing the raw sequence letters (paired).')
     parser.add_argument('-t', dest='taxid', required=True,
-        type=int, nargs='+',
+        nargs='+',
         help='Taxonomy ID[s] of reads to extract (space-delimited)')
     parser.add_argument('-o', dest='output_file', required=True,
         help='Output FASTA file containing the reads and sample IDs')
@@ -229,7 +229,6 @@ def main():
             if taxid in save_taxids:
                 base_nodes[taxid] = curr_node 
         r_file.close()
-        
         #FOR SAVING PARENTS
         if args.parents:
             #For each node saved, traverse up the tree and save each taxid 
