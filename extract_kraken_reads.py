@@ -82,6 +82,8 @@ class Tree(object):
 #   - read ID
 def process_kraken_output(kraken_line):
     l_vals = kraken_line.split('\t')
+    if len(l_vals) < 5:
+        return [-1, '']
     if "taxid" in l_vals[2]:
         temp = l_vals[2].split("taxid ")[-1]
         tax_id = temp[:-1]
@@ -271,7 +273,8 @@ def main():
             sys.stdout.flush()
         #Parse line for results
         [tax_id, read_id] = process_kraken_output(line)
-        
+        if tax_id == -1:
+            continue
         #Skip if reads are human/artificial/synthetic
         if (tax_id in save_taxids) and not args.exclude:
             save_taxids[tax_id] += 1
@@ -322,10 +325,12 @@ def main():
     #Process SEQUENCE 1 file 
     count_seqs = 0
     count_output = 0
+    save_seqs = {}
+    save_seqs2 = {}
     for record in SeqIO.parse(s_file1,filetype):
         count_seqs += 1
         test_id = str(record.id)
-        if "/1" or "/2" in test_id:
+        if ("/1" in test_id) or ("/2" in test_id):
             test_id = test_id[:-1]
         if test_id in save_readids:
             count_output += 1
@@ -335,7 +340,8 @@ def main():
             sequence = str(record.seq)
             #Print the read_id and the sequence to the file
             new_record = SeqRecord(Seq(sequence),id=test_id) 
-            save_readids[test_id] = new_record
+            save_seqs[test_id] = new_record
+            save_readids[test_id] += 1
         #If no more reads to find 
         if len(save_readids) == count_output:
             break
@@ -357,17 +363,19 @@ def main():
                 sys.stdout.write('\r\t%i read IDs found (%i reads processed)' % (count_output, count_seqs))
                 sys.stdout.flush()
                 if args.output_file2 != '':
-                    save_readids2[test_id] = record
+                    save_seqs2[test_id] = record
+                    save_readids[test_id] += 1
                 else:
                     new_sequence = str(save_readids[test_id].seq) + args.delim + str(record.seq)
                     new_record = SeqRecord(Seq(new_sequence),id=test_id) 
-                    save_readids[test_id] = new_record
+                    save_seqs[test_id] = new_record
+                    save_readids[test_id] += 1
             #If no more reads to find 
             if len(save_readids) == count_output:
                 break
         s_file2.close()
-    #End Program
-    sys.stdout.write('\r\t%i read IDs found (%i reads processed)\n' % (count_output, count_seqs))
+        #End Program
+        sys.stdout.write('\r\t%i read IDs found (%i reads processed)\n' % (count_output, count_seqs))
     
     #Open output file
     if (args.append):
@@ -378,10 +386,12 @@ def main():
         o_file = open(args.output_file, 'w')
         if args.output_file2 != '':
             o_file2 = open(args.output_file2, 'w')
-    for i in save_readids:
-        SeqIO.write(save_readids[i], o_file, "fasta")
-        if args.output_file2 != '':
-            SeqIO.write(save_readids2[i], o_file2, "fasta")
+    #WRITE OUTPUT SEQUENCES
+    for i in save_seqs:
+        if save_readids[i] != 0:
+            SeqIO.write(save_seqs[i], o_file, "fasta")
+            if args.output_file2 != '':
+                SeqIO.write(save_seqs2[i], o_file2, "fasta")
     #End Program
     sys.stdout.write('\t' + str(count_output) + ' reads printed to file\n')
     sys.stdout.write('\tGenerated file: %s\n' % args.output_file)
