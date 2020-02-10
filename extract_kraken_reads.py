@@ -119,7 +119,7 @@ def process_kraken_report(report_line):
         return []
     #Extract relevant information
     level_type = l_vals[3]
-    taxid = l_vals[4]
+    taxid = int(l_vals[4])
     #Get spaces to determine level num
     spaces = 0
     for char in l_vals[-1]:
@@ -181,7 +181,7 @@ def main():
     #Initialize taxids
     save_taxids = {}
     for tid in args.taxid:
-        save_taxids[tid] = 0
+        save_taxids[int(tid)] = 0
     main_lvls = ['R','K','D','P','C','O','F','G','S']
 
     #STEP 0: READ IN REPORT FILE AND GET ALL TAXIDS 
@@ -201,10 +201,10 @@ def main():
             if len(report_vals) == 0:
                 continue
             [taxid, level_num, level_id] = report_vals
-            if taxid == "0":
+            if taxid == 0:
                 continue 
             #tree root
-            if taxid == '1':
+            if taxid == 1:
                 root_node = Tree(taxid, level_num, level_id)
                 prev_node = root_node
                 #save if needed
