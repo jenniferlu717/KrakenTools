@@ -355,7 +355,7 @@ def main():
         for record in SeqIO.parse(s_file2, filetype):
             count_seqs += 1
             test_id = str(record.id)
-            if "/1" or "/2" in test_id:
+            if ("/1" in test_id) or ("/2" in test_id):
                 test_id = test_id[:-1]
             if test_id in save_readids:
                 count_output+=1
