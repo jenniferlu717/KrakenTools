@@ -257,7 +257,7 @@ def main():
     #Initialize values
     count_kraken = 0
     read_line = -1
-   
+    exclude_taxids = {} 
     if args.exclude:
         exclude_taxids = save_taxids 
         save_taxids = {} 
