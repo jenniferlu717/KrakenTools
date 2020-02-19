@@ -257,7 +257,10 @@ def main():
     #Initialize values
     count_kraken = 0
     read_line = -1
-    
+   
+    if args.exclude:
+        exclude_taxids = save_taxids 
+        save_taxids = {} 
     #PROCESS KRAKEN FILE FOR CLASSIFIED READ IDS
     k_file = open(args.kraken_file, 'r')
     sys.stdout.write('\t0 reads processed')
@@ -279,8 +282,11 @@ def main():
             save_taxids[tax_id] += 1
             save_readids2[read_id] = 0
             save_readids[read_id] = 0 
-        elif (tax_id not in save_taxids) and args.exclude:
-            save_taxids[tax_id] += 1
+        elif (tax_id not in exclude_taxids) and args.exclude:
+            if tax_id not in save_taxids:
+                save_taxids[tax_id] = 1
+            else:
+                save_taxids[tax_id] += 1
             save_readids2[read_id] = 0
             save_readids[read_id] = 0 
         if len(save_readids) >= args.max_reads:
