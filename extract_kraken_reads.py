@@ -301,9 +301,9 @@ def main():
     seq_file2 = args.seq_file2
     ####TEST IF INPUT IS FASTA OR FASTQ
     if(seq_file1[-3:] == '.gz'):
-        s_file1 = gzip.open(seq_file1,'r')
+        s_file1 = gzip.open(seq_file1,'rt')
     else:
-        s_file1 = open(seq_file1,'r')
+        s_file1 = open(seq_file1,'rt')
     first = s_file1.readline()
     if first[0] == ">":
         filetype = "fasta"
@@ -316,9 +316,9 @@ def main():
     ####ACTUALLY OPEN FILE
     if(seq_file1[-3:] == '.gz'):
         #Zipped Sequence Files
-        s_file1 = gzip.open(seq_file1,'r')
+        s_file1 = gzip.open(seq_file1,'rt')
         if len(seq_file2) > 0:
-            s_file2 = gzip.open(seq_file2,'r')
+            s_file2 = gzip.open(seq_file2,'rt')
     else:
         s_file1 = open(seq_file1, 'r')
         if len(seq_file2) > 0:
