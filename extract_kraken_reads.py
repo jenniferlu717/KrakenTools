@@ -44,6 +44,7 @@
 #                                       of taxids 
 #   --append............................append extracted reads to output file if existing
 #   --noappend..........................rewrite file if existing [default] 
+#   --exclude...........................exclude the taxids specified
 # ** by default, only reads classified exactly at taxids provided will be extracted
 # ** if either of these are specified, a report file must also be provided 
 ######################################################################
@@ -147,8 +148,8 @@ def main():
         help='Output FASTA file containing the reads and sample IDs')
     parser.add_argument('-o2', dest='output_file2', required=False, default='',
         help='If specified, contains the 2nd pair of reads') 
-    parser.add_argument('-d', '--delimiter', dest='delim', required=False, default='N',
-        help='For paired reads, concatenate using specified delimiter')
+    #parser.add_argument('-d', '--delimiter', dest='delim', required=False, default='N',
+    #    help='For paired reads, concatenate using specified delimiter')
     parser.add_argument('--append', dest='append', action='store_true',
         help='Append the sequences to the end of the output FASTA file specified.')
     parser.add_argument('--noappend', dest='append', action='store_false',
@@ -170,6 +171,9 @@ def main():
     parser.add_argument('--exclude', dest='exclude', required=False,
         action='store_true',default=False,
         help='Instead of finding reads matching specified taxids, finds all reads NOT matching specified taxids') 
+    parser.add_argument('--fastq-output', dest='fastq_out', required=False,
+        action='store_true',default=False,
+        help='Print output FASTQ reads [requires input FASTQ, default: output is FASTA]')
     parser.set_defaults(append=False)
 
     args=parser.parse_args()
@@ -313,6 +317,9 @@ def main():
         sys.stderr.write("ERROR: sequence file must be FASTA or FASTQ\n")
         exit(1)
     s_file1.close()
+    if filetype != 'fastq' and args.fastq_out:
+        sys.stderr.write('ERROR: for FASTQ output, input file must be FASTQ\n')
+        exit(1)
     ####ACTUALLY OPEN FILE
     if(seq_file1[-3:] == '.gz'):
         #Zipped Sequence Files
@@ -325,7 +332,7 @@ def main():
             s_file2 = open(seq_file2, 'r')
     #PROCESS INPUT FILE AND SAVE FASTA FILE
     sys.stdout.write(">> STEP 2: READING SEQUENCE FILES AND WRITING READS\n")
-    sys.stdout.write('\t0 read IDs found (0 reads processed)')
+    sys.stdout.write('\t0 read IDs found (0 mill reads processed)')
     sys.stdout.flush()
     #Process SEQUENCE 1 file 
     count_seqs = 0
@@ -334,45 +341,53 @@ def main():
     save_seqs2 = {}
     for record in SeqIO.parse(s_file1,filetype):
         count_seqs += 1
+        #Print update
+        if (count_seqs % 1000 == 0):
+            sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
+            sys.stdout.flush()
+        #Check ID 
         test_id = str(record.id)
         if ("/1" in test_id) or ("/2" in test_id):
-            test_id = test_id[:-1]
+            test_id = test_id[:-2]
         if test_id in save_readids:
             count_output += 1
             #Print update
-            sys.stdout.write('\r\t%i read IDs found (%i reads processed)' % (count_output, count_seqs))
+            sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
             sys.stdout.flush()
-            sequence = str(record.seq)
-            #Print the read_id and the sequence to the file
-            new_record = SeqRecord(Seq(sequence),id=test_id) 
-            save_seqs[test_id] = new_record
+            #Save the read_id and the sequence to the file
+            save_seqs[test_id] = record
             save_readids[test_id] += 1
         #If no more reads to find 
         if len(save_readids) == count_output:
             break
     #Close files
     s_file1.close()
-    sys.stdout.write('\r\t%i read IDs found (%i reads processed)\n' % (count_output, count_seqs))
+    sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)\n' % (count_output, float(count_seqs/1000000.)))
+    sys.stdout.flush()
+    count_output = 0
+    count_seqs = 0
     if len(seq_file2) > 0:
-        sys.stdout.write('\t0 read IDs in found (0 reads processed)')
+        sys.stdout.write('\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
         sys.stdout.flush()
-        count_output = 0
-        count_seqs = 0
         for record in SeqIO.parse(s_file2, filetype):
             count_seqs += 1
+            #Print update
+            if (count_seqs % 1000 == 0):
+                sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
+                sys.stdout.flush()
             test_id = str(record.id)
             if ("/1" in test_id) or ("/2" in test_id):
-                test_id = test_id[:-1]
+                test_id = test_id[:-2]
             if test_id in save_readids:
-                count_output+=1
-                sys.stdout.write('\r\t%i read IDs found (%i reads processed)' % (count_output, count_seqs))
+                count_output += 1
+                sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
                 sys.stdout.flush()
                 if args.output_file2 != '':
                     save_seqs2[test_id] = record
                     save_readids[test_id] += 1
                 else:
-                    new_sequence = str(save_readids[test_id].seq) + args.delim + str(record.seq)
-                    new_record = SeqRecord(Seq(new_sequence),id=test_id) 
+                    new_record = save_seqs[test_id] + record
+                    new_record.id = test_id 
                     save_seqs[test_id] = new_record
                     save_readids[test_id] += 1
             #If no more reads to find 
@@ -380,7 +395,7 @@ def main():
                 break
         s_file2.close()
         #End Program
-        sys.stdout.write('\r\t%i read IDs found (%i reads processed)\n' % (count_output, count_seqs))
+        sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)\n' % (count_output, float(count_seqs/1000000.)))
     
     #Open output file
     if (args.append):
@@ -394,9 +409,17 @@ def main():
     #WRITE OUTPUT SEQUENCES
     for i in save_seqs:
         if save_readids[i] != 0:
-            SeqIO.write(save_seqs[i], o_file, "fasta")
+            #FASTQ or FASTA output
+            if args.fastq_out:
+                SeqIO.write(save_seqs[i], o_file, "fastq")
+            else:
+                SeqIO.write(save_seqs[i], o_file, "fasta")
+            #Second file?
             if args.output_file2 != '':
-                SeqIO.write(save_seqs2[i], o_file2, "fasta")
+                if args.fastq_out:
+                    SeqIO.write(save_seqs2[i], o_file2, "fastq")
+                else:
+                    SeqIO.write(save_seqs2[i], o_file2, "fasta")
     #End Program
     sys.stdout.write('\t' + str(count_output) + ' reads printed to file\n')
     sys.stdout.write('\tGenerated file: %s\n' % args.output_file)
