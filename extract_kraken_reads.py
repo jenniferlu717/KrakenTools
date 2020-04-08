@@ -145,11 +145,9 @@ def main():
         nargs='+',
         help='Taxonomy ID[s] of reads to extract (space-delimited)')
     parser.add_argument('-o', dest='output_file', required=True,
-        help='Output FASTA file containing the reads and sample IDs')
+        help='Output FASTA/Q file containing the reads and sample IDs')
     parser.add_argument('-o2', dest='output_file2', required=False, default='',
-        help='If specified, contains the 2nd pair of reads') 
-    #parser.add_argument('-d', '--delimiter', dest='delim', required=False, default='N',
-    #    help='For paired reads, concatenate using specified delimiter')
+        help='Output FASTA/Q file containig the second pair of reads [required for paired input]') 
     parser.add_argument('--append', dest='append', action='store_true',
         help='Append the sequences to the end of the output FASTA file specified.')
     parser.add_argument('--noappend', dest='append', action='store_false',
@@ -181,6 +179,11 @@ def main():
     #Start Program
     time = strftime("%m-%d-%Y %H:%M:%S", gmtime())
     sys.stdout.write("PROGRAM START TIME: " + time + '\n')
+    
+    #Check input 
+    if (len(args.output_file2) == 0) and (len(args.seq_file2) > 0):
+        sys.stderr.write("Must specify second output file -o2 for paired input\n")
+        exit(1)
 
     #Initialize taxids
     save_taxids = {}
@@ -334,11 +337,18 @@ def main():
     sys.stdout.write(">> STEP 2: READING SEQUENCE FILES AND WRITING READS\n")
     sys.stdout.write('\t0 read IDs found (0 mill reads processed)')
     sys.stdout.flush()
+    #Open output file
+    if (args.append):
+        o_file = open(args.output_file, 'a')
+        if args.output_file2 != '':
+            o_file2 = open(args.output_file2, 'a')
+    else:
+        o_file = open(args.output_file, 'w')
+        if args.output_file2 != '':
+            o_file2 = open(args.output_file2, 'w')
     #Process SEQUENCE 1 file 
     count_seqs = 0
     count_output = 0
-    save_seqs = {}
-    save_seqs2 = {}
     for record in SeqIO.parse(s_file1,filetype):
         count_seqs += 1
         #Print update
@@ -349,19 +359,23 @@ def main():
         test_id = str(record.id)
         if ("/1" in test_id) or ("/2" in test_id):
             test_id = test_id[:-2]
+        #Sequence found
         if test_id in save_readids:
             count_output += 1
             #Print update
             sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
             sys.stdout.flush()
-            #Save the read_id and the sequence to the file
-            save_seqs[test_id] = record
-            save_readids[test_id] += 1
+            #Save to file
+            if args.fastq_out:
+                SeqIO.write(record, o_file, "fastq")
+            else:
+                SeqIO.write(record, o_file, "fasta")
         #If no more reads to find 
         if len(save_readids) == count_output:
             break
     #Close files
     s_file1.close()
+    o_file.close()
     sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)\n' % (count_output, float(count_seqs/1000000.)))
     sys.stdout.flush()
     count_output = 0
@@ -378,56 +392,29 @@ def main():
             test_id = str(record.id)
             if ("/1" in test_id) or ("/2" in test_id):
                 test_id = test_id[:-2]
+            #Sequence found
             if test_id in save_readids:
                 count_output += 1
                 sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
                 sys.stdout.flush()
-                if args.output_file2 != '':
-                    save_seqs2[test_id] = record
-                    save_readids[test_id] += 1
+                #Save to file
+                if args.fastq_out:
+                    SeqIO.write(record, o_file2, "fastq")
                 else:
-                    new_record = save_seqs[test_id] + record
-                    new_record.id = test_id 
-                    save_seqs[test_id] = new_record
-                    save_readids[test_id] += 1
+                    SeqIO.write(record, o_file2, "fasta")
             #If no more reads to find 
             if len(save_readids) == count_output:
                 break
         s_file2.close()
+        o_file2.close()
         #End Program
         sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)\n' % (count_output, float(count_seqs/1000000.)))
     
-    #Open output file
-    if (args.append):
-        o_file = open(args.output_file, 'a')
-        if args.output_file2 != '':
-            o_file2 = open(args.output_file2, 'a')
-    else:
-        o_file = open(args.output_file, 'w')
-        if args.output_file2 != '':
-            o_file2 = open(args.output_file2, 'w')
-    #WRITE OUTPUT SEQUENCES
-    for i in save_seqs:
-        if save_readids[i] != 0:
-            #FASTQ or FASTA output
-            if args.fastq_out:
-                SeqIO.write(save_seqs[i], o_file, "fastq")
-            else:
-                SeqIO.write(save_seqs[i], o_file, "fasta")
-            #Second file?
-            if args.output_file2 != '':
-                if args.fastq_out:
-                    SeqIO.write(save_seqs2[i], o_file2, "fastq")
-                else:
-                    SeqIO.write(save_seqs2[i], o_file2, "fasta")
     #End Program
     sys.stdout.write('\t' + str(count_output) + ' reads printed to file\n')
     sys.stdout.write('\tGenerated file: %s\n' % args.output_file)
-    
-    o_file.close()
     if args.output_file2 != '':
         sys.stdout.write('\tGenerated file: %s\n' % args.output_file2)
-        o_file2.close()
     
     #End of program
     time = strftime("%m-%d-%Y %H:%M:%S", gmtime())
