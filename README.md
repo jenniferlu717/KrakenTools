@@ -26,10 +26,12 @@ taxonomy ID. Additional options are specified below.
     *   `-k, --kraken MYFILE.KRAKEN.............`Kraken output file
     *   `-s, -s1, -1, -U SEQUENCE.FILE..........`FASTA/FASTQ sequence file (may be gzipped)
     *   `-s2, -2 SEQUENCE2.FILE.................`FASTA/FASTQ sequence file (for paired reads, may be gzipped)
-    *   `-o, --output OUTPUT.FASTA..............`output FASTA file with extracted seqs
+    *   `-o, --output2 OUTPUT.FASTA.............`output FASTA/Q file with extracted seqs
     *   `-t, --taxid TID TID2 etc...............`list of taxonomy IDs to extract (separated by spaces)        
 
     Optional:
+    *   `-o2, --output2 OUTPUT.FASTA.............`second output FASTA/Q file with extracted seqs (for paired reads)
+    *   `--fastq-output..........................`Instead of producing FASTA files, print FASTQ files (requires FASTQ input)
     *   `--exclude...............................`Instead of finding reads matching specified taxids, finds reads NOT matching specified taxids.
     *   `-r, --report MYFILE.KREPORT.............`Kraken report file (required if specifying --include-children or --include-parents)
     *   `--include-children......................`include reads classified at more specific levels than specified taxonomy ID levels. 
@@ -52,17 +54,15 @@ taxonomy ID. Additional options are specified below.
         
     `extract_kraken_reads.py -k myfile.kraken -s1 read1.fq -s2 reads2.fq`
     
-    By default, extracted paired reads will be output concatenated with 'N'.
-    However, users have the option to specify a different delimiter using the
-    `--delimiter` or `-d` option:
-    
-    `extract_kraken_reads.py -k myfile.kraken -s1 read1.fq -s2 reads2.fq -d X`
-    
-    Users may also get non-concatenated reads by specifying a second output
-    file. If a 2nd output file is provided, any delimiter will be ignored and
-    the individual pairs will be preserved in two separate files:
+    Given paired reads, the script requires users to provide two output file 
+    names to contain extracted reads:
 
+    `extract_kraken_reads.py -k myfile.kraken -s1 read1.fq -s2 reads2.fq -o extracted1.fq -o2 extracted2.fq`
+    
+    The delimiter (`--delimiter` or `-d`) option has been removed.
+    
     `extract_kraken_reads.py -k myfile.kraken ... -o reads_S1.fa -o2 reads_s2.fa`
+
 4. `--exclude` flag
     
     By default, reads classified at specified taxonomy IDs will be extracted (and any taxids selected using `--include-parents`/`--include-children`. However, specifying `--exclude` will cause the reads NOT classified at any specified taxonomy IDs.

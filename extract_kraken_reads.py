@@ -141,12 +141,12 @@ def main():
         help='FASTA/FASTQ File containing the raw sequence letters.')
     parser.add_argument('-s2', '-2', dest='seq_file2', default= "",
         help='2nd FASTA/FASTQ File containing the raw sequence letters (paired).')
-    parser.add_argument('-t', dest='taxid', required=True,
+    parser.add_argument('-t', "--taxid",dest='taxid', required=True,
         nargs='+',
         help='Taxonomy ID[s] of reads to extract (space-delimited)')
-    parser.add_argument('-o', dest='output_file', required=True,
+    parser.add_argument('-o', "--output",dest='output_file', required=True,
         help='Output FASTA/Q file containing the reads and sample IDs')
-    parser.add_argument('-o2', dest='output_file2', required=False, default='',
+    parser.add_argument('-o2',"--output2", dest='output_file2', required=False, default='',
         help='Output FASTA/Q file containig the second pair of reads [required for paired input]') 
     parser.add_argument('--append', dest='append', action='store_true',
         help='Append the sequences to the end of the output FASTA file specified.')
