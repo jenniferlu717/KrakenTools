@@ -27,7 +27,7 @@ This program extract reads classified at any user-specified taxonomy IDs. User
 must specify the Kraken output file, the sequence file(s), and at least one
 taxonomy ID. Additional options are specified below.
 
-## USAGE/OPTIONS
+## 1. extract\_kraken\_reads.py usage/options 
     
 `python extract_kraken_reads.py`
 *   `-k, --kraken MYFILE.KRAKEN.............`Kraken output file
@@ -47,14 +47,14 @@ Optional:
 *   `--append................................`if output file exists, appends reads
 *   `--noappend..............................`[default] rewrites existing output file
     
-## INPUT FILES: SEQUENCE FILES
+## 2. extract\_kraken\_reads.py input files
 
 Input sequence files must be either FASTQ or FASTA files. Input files
 can be gzipped or not. The program will automatically detect whether
 the file is gzipped and whether it is FASTQ or FASTA formatted based on
 the first character in the file (">" for FASTA, "@" for FASTQ)
 
-## PAIRED INPUT/OUTPUT
+## 3. extract\_kraken\_reads.py paired input/output 
     
 Users that ran Kraken using paired reads should input both read files into
 extract\_kraken\_reads.py as follows:
@@ -70,7 +70,7 @@ The delimiter (`--delimiter` or `-d`) option has been removed.
     
     `extract_kraken_reads.py -k myfile.kraken ... -o reads_S1.fa -o2 reads_s2.fa
 
-## `--exclude` flag
+## 4. extract\_kraken\_reads.py --exclude flag
     
 By default, reads classified at specified taxonomy IDs will be extracted (and any taxids selected using `--include-parents`/`--include-children`. However, specifying `--exclude` will cause the reads NOT classified at any specified taxonomy IDs.
 
@@ -78,10 +78,9 @@ For example:
 1. `extract_kraken_reads.py -k myfile.kraken ... --taxid 9606 --exclude` ==> extract all reads NOT classified as Human (taxid 9606). 
 2. `extract_kraken_reads.py -k myfile.kraken ... --taxid 2 --exclude --include-children` ==> extract all reads NOT classified as Bacteria (taxid 2) or any classification in the Bacteria subtree. 
 3. `extract_kraken_reads.py -k myfile.kraken ... --taxid 9606 --exclude --include-parents` ==> extract all reads NOT classified as Human or any classification in the direct ancestry of Human (e.g. will exclude reads classified at the Primate, Chordata, or Eukaryota levels). 
-
-
-## `--include-parents`/`--include-children` flags
     
+## 5. extract\_kraken\_reads.py --include-parents/--include-children flags
+
 By default, only reads classified exactly at the specified taxonomy IDs
 will be extracted. Options --include-children and --include parents can be
 used to extract reads classified within the same lineage as a specified
@@ -112,7 +111,7 @@ taxonomy ID. For example, given a Kraken report containing the following:
 
 This script combines multiple Kraken reports into a combined report file.
 
-## USAGE/OPTIONS
+## 1. combine\_kreports.py usage/options
     
 `python complete_kreports.py`
 *    `-r 1.KREPORT 2.KREPORT........................`Kraken-style reports to combine 
@@ -124,7 +123,7 @@ Optional:
 *   `--sample-names.................................`give abbreviated names for each sample [default: S1, S2, ... etc]
 *   `--only-combined................................`output uses exact same columns as a single Kraken-style report file. Only total numbers for read counts and percentages will be used. Reads from individual reports will not be included.
 
-## OUTPUT 
+## 2. combine\_kreports.py output
 Percentage is only reported for the summed read counts, not for each individual sample. 
 
 The output file therefore contains the following tab-delimited columns:
@@ -144,7 +143,7 @@ The output file therefore contains the following tab-delimited columns:
 
 This program takes a Kraken report file and prints out a krona-compatible TEXT file
 
-## USAGE/OPTIONS
+## 1. kreport2krona.py usage/options
     
 `python kreport2krona.py`
 *    `-r/--report MYFILE.KREPORT........`Kraken report file 
@@ -154,7 +153,7 @@ Optional:
 *    `--no-intermediate-ranks...........`only output standard levels [D,P,C,O,F,G,S] 
 *    `--intermediate-ranks..............`[default] include non-standard levels
 
-## EXAMPLE USAGE 
+## 2. kreport2krona.py example usage
     
     kraken2 --db KRAKEN2DB --threads THREADNUM --report MYSAMPLE.KREPORT \
         --paired SAMPLE_1.FASTA SAMPLE_2.FASTA > MYSAMPLE.KRAKEN2
@@ -167,7 +166,7 @@ Krona information: see https://github.com/marbl/Krona.
 
 This program takes the output file of a Bracken report and filters the desired taxonomy IDs. 
 
-## USAGE/OPTIONS
+## 1. filter\_bracken\_out.py usage/options
     
 `python filter_bracken_out.py`
 *   `-i/--input MYFILE.BRACKEN..........`Bracken output file
@@ -187,7 +186,7 @@ file will sum to 100%.
 When specifying the --exclude flag alone, all lines in the Bracken file
 will be preserved EXCEPT for the lines matching taxonomy IDs provided. 
     
-## EXAMPLE USAGE
+## 2. filter\_bracken\_out.py example usage
 
 This program can be useful for isolating a subset of species to 
 better understand the distribution of those particular species in the sample. 
@@ -233,7 +232,7 @@ taxonomy for a given sequence is not found. This script can search through
 any accession2taxid files provided and the unmapped.txt file and generate a 
 seqid2taxid.map file to be appended to the one already generated. 
 
-## USAGE/OPTIONS
+## 1. fix\_unmapped.py usage/options
     
 `python fix_unmapped.py`
 *    `-i/--input unmapped.txt...........`Any file containing accession IDs to map
@@ -243,7 +242,7 @@ seqid2taxid.map file to be appended to the one already generated.
 Optional:
 *    `-r/--remaining....................`file containing any unmapped accession IDs after search [default: `still_unmapped.txt`]
 
-## EXAMPLE USAGE 
+## 2. fix\_unmapped.py usage/options example usage
     
     rm *.k2d 
     mv seqid2taxid.map seqid2taxid_1.map
