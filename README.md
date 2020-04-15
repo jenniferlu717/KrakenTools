@@ -6,11 +6,11 @@ Kraken/KrakenUniq/Kraken2/Bracken results. Please cite the relevant paper
 if using KrakenTools with any of the listed programs. 
 
 ## Scripts included in KrakenTools 
-1. [extract\_kraken\_reads.py](#extract\_kraken\_reads.py)
-2. [combine\_kreports.py](#combine\_kreports.py)
-3. [kreport2krona.py](#kreport2krona.py)
-4. [filter\_bracken\_out.py](#filter\_bracken\_out.py)
-4. [fix\_unmapped.py](#fix\_unmapped.py)
+1. [extract\_kraken\_reads.py](#extract\_kraken\_readspy)
+2. [combine\_kreports.py](#combine\_kreportspy)
+3. [kreport2krona.py](#kreport2kronapy)
+4. [filter\_bracken\_out.py](#filter\_bracken\_outy)
+4. [fix\_unmapped.py](#fix\_unmappedpy)
 
 # Running Scripts:
 No installation required. 
