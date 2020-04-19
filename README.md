@@ -11,8 +11,8 @@ if using KrakenTools with any of the listed programs.
 3. [kreport2krona.py](#kreport2kronapy)
 4. [filter\_bracken\_out.py](#filter\_bracken\_outy)
 5. [fix\_unmapped.py](#fix\_unmappedpy)
-6. [make\_ktaxonomy.py] (#make\_ktaxonomypy)
-7. [make\_kreport.py] (#make\_kreportpy)
+6. [make\_ktaxonomy.py](#make\_ktaxonomypy)
+7. [make\_kreport.py](#make\_kreportpy)
 
 # Running Scripts:
 No installation required. 
@@ -275,11 +275,11 @@ file but not in either the `nodes.dmp` or the `names.dmp` files.
 The output file is similar to the nodes.dmp/names.dmp file format, but not identical. 
 Each of the following columns is separated by a tab-vertical line-tab (e.g. `\t|\t`).
 
-    1. taxonomy ID 
-    2. parent taxonomy ID
-    3. rank type (R = root, D = domain/superkingdom, P = phylum, etc.)
-    4. level number (distance from root)
-    5. name
+1. taxonomy ID 
+2. parent taxonomy ID
+3. rank type (R = root, D = domain/superkingdom, P = phylum, etc.)
+4. level number (distance from root)
+5. name
 
 For ranks outside of the traditional taxonomy ranks (R, D, P, C, O, F, G, S),
 the rank type will be assigned based on the closest parent, with a number to specify
@@ -333,7 +333,8 @@ file contains 6 tab-delimited columns as follows:
 6. Name (preceeded by spaces to indicate distance from root) 
 
 
-#Author Information 
+
+# Author Information 
 Jennifer Lu
 jennifer.lu717@gmail.com
 jlu26@jhmi.edu 
