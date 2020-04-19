@@ -5,6 +5,16 @@ KrakenTools is a suite of scripts to be used for post-analysis of
 Kraken/KrakenUniq/Kraken2/Bracken results. Please cite the relevant paper
 if using KrakenTools with any of the listed programs. 
 
+## Links to Kraken github pages
+1. [Kraken 1](https://github.com/DerrickWood/kraken)
+2. [Kraken 2](https://github.com/DerrickWood/kraken2)
+3. [KrakenUniq](https://github.com/fbreitwieser/krakenuniq)
+4. [Bracken](https://github.com/jenniferlu717/Bracken) 
+
+For issues with any of the above programs, 
+please open a github issue on their respective github pages. 
+This github repository is dedicated to only the scripts provided here. 
+
 ## Scripts included in KrakenTools 
 1. [extract\_kraken\_reads.py](#extract\_kraken\_readspy)
 2. [combine\_kreports.py](#combine\_kreportspy)
