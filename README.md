@@ -271,7 +271,7 @@ generate a single text taxonomy file for any Kraken 1, Kraken 2, or KrakenUniq d
 The program will inform users if a taxonomy ID is listed in the `seqid2taxid.map` 
 file but not in either the `nodes.dmp` or the `names.dmp` files. 
 
-### make\_ktaxonomy.py output file format
+### 2. make\_ktaxonomy.py output file format
 The output file is similar to the nodes.dmp/names.dmp file format, but not identical. 
 Each of the following columns is separated by a tab-vertical line-tab (e.g. `\t|\t`).
 
@@ -290,13 +290,13 @@ Currently, names for each node are selected based on the first name listed in
 the `names.dmp` file or the name designated as `scientific name`. 
 `scientific names` will be preferred over all others.    
 
-## 2. make\_ktaxonomy.py required input 
+## 3. make\_ktaxonomy.py required input 
 1. taxonomy/nodes.dmp
 2. taxonomy/names.dmp
 3. seqid2taxid.map 
 
-## 3. KrakenTools scripts requiring make\_ktaxonomy.py output:
-1. [make\_kreport.py] (#make\_kreportpy)
+## 4. KrakenTools scripts requiring make\_ktaxonomy.py output:
+1. [make\_kreport.py](#make\_kreportpy)
 
 # make\_kreport.py 
 This program will generate a kraken-style report file from the kraken output file. 
