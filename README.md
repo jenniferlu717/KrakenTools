@@ -303,7 +303,8 @@ This program will generate a kraken-style report file from the kraken output fil
 Currently, this only generates reports for Kraken 1 or Kraken 2. This program
 does not currently work for KrakenUniq output files (to be completed in a future project). 
 
-This program requires that users first generate the taxonomy file created by [make\_ktaxonomy.py] (#make\ktaxonomypy). 
+This program requires that users first generate the taxonomy file 
+created by [make\_ktaxonomy.py](#make\ktaxonomypy). 
 
 ## 1. make\_kreport.py usage/options 
 `python make_kreport.py`
