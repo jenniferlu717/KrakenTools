@@ -68,7 +68,10 @@ def main():
     parser.add_argument('-t','--taxonomy', dest='tax_file', required=True,
         help='Output taxonomy file from make_ktaxonomy.py')
     parser.add_argument('-o','--output',dest='out_file', required=True,
-        help='output kraken report file')
+        help='Output kraken report file')
+    parser.add_argument('--use-read-len',dest='use_read_len',
+        action='store_true',default=False, required=False,
+        help='Make report file using sum of read lengths [default: read counts]')
     args = parser.parse_args()
 
     #Start Program
@@ -115,12 +118,21 @@ def main():
             sys.stdout.flush()
         l_vals = line.strip().split('\t')
         taxid = l_vals[2]
+        count = 1
+        #If using read length instead of read counts
+        if args.use_read_len:
+            if '|' in l_vals[3]:
+                [len1,len2] = l_vals[3].split('|')
+                count = int(len1)+int(len2)
+            else:
+                count = int(l_vals[3])
+        #add to dictionaries 
         if taxid not in taxid2counts:
-            taxid2counts[taxid] = 1
-            taxid2allcounts[taxid] = 1
+            taxid2counts[taxid] = count
+            taxid2allcounts[taxid] = count
         else:
-            taxid2counts[taxid] += 1
-            taxid2allcounts[taxid] += 1
+            taxid2counts[taxid] += count
+            taxid2allcounts[taxid] += count
     k_file.close()
     sys.stdout.write('\r\t%0.3f million reads processed\n' % float(read_count/1000000.))
     sys.stdout.flush()
