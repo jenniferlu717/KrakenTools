@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 ####################################################################
 #kreport2krona.py converts a Kraken-style report into Krona-compatible format
 #Copyright (C) 2019 Jennifer Lu, jlu26@jhmi.edu

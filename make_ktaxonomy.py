@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/env python
 ######################################################################
 #make_taxonomy.py takes in three files: nodes.dmp, names.dmp, and 
 #seqid2taxid.map to create a condensed taxonomy file 

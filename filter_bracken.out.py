@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 #################################################################
 #filter_bracken_out.py allows users to filter Bracken output files 
 #Copyright (C) 2019 Jennifer Lu, jlu26@jhmi.edu
