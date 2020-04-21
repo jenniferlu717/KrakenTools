@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 ######################################################################
 #extract_kraken_reads.py takes in a kraken-style output and kraken report
 #and a taxonomy level to extract reads matching that level

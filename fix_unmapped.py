@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 ####################################################################
 #fix_unmapped.py analyzes a text file of accession IDs and maps them
 #to their respective taxonomy IDs given accession2taxid files. 

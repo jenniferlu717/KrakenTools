@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 ################################################################
 #combine_kreports.py takes multiple kraken-style reports and combines
 #them into a single report file
