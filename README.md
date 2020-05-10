@@ -15,6 +15,7 @@ For issues with any of the above programs,
 please open a github issue on their respective github pages. 
 This github repository is dedicated to only the scripts provided here. 
 
+---------------------------------------------------------
 ## Scripts included in KrakenTools 
 1. [extract\_kraken\_reads.py](#extract\_kraken\_readspy)
 2. [combine\_kreports.py](#combine\_kreportspy)
@@ -33,6 +34,7 @@ Users can make scripts executable by running
     chmod +x myscript.py
     ./myscript.py -h 
 
+---------------------------------------------------------
 # extract\_kraken\_reads.py
 
 This program extract reads classified at any user-specified taxonomy IDs. User
@@ -119,6 +121,7 @@ taxonomy ID. For example, given a Kraken report containing the following:
 5.  `extract_kraken_reads.py  [options] -t 498388 --include-parents` ==> 950 reads classified as _E. coli C_, _E. coli_, or Bacteria will be extracted
 6.  `extract_kraken_reads.py  [options] -t 1 --include-children` ==> All classified reads will be extracted 
 
+---------------------------------------------------------
 # combine\_kreports.py 
 
 This script combines multiple Kraken reports into a combined report file.
@@ -151,6 +154,7 @@ The output file therefore contains the following tab-delimited columns:
 *    `taxid...........`taxonomy ID of this clade
 *    `name............`name of this clade 
 
+---------------------------------------------------------
 # kreport2krona.py 
 
 This program takes a Kraken report file and prints out a krona-compatible TEXT file
@@ -174,6 +178,7 @@ Optional:
     
 Krona information: see https://github.com/marbl/Krona. 
 
+---------------------------------------------------------
 # filter\_bracken\_out.py
 
 This program takes the output file of a Bracken report and filters the desired taxonomy IDs. 
@@ -238,6 +243,7 @@ reads in the above example. The output would then be:
         Bordetella pertussis     520         S           ...         ....       200     0.20000
         ...
     
+---------------------------------------------------------
 # fix\_unmapped.py 
 When building a Kraken database, an "unmapped.txt" file may be generated if a 
 taxonomy for a given sequence is not found. This script can search through 
@@ -262,6 +268,7 @@ Optional:
     cat seqid2taxid_1.map seqid2taxid_temp.map
     kraken2-build --build --db . --threads 4
 
+---------------------------------------------------------
 # make\_ktaxonomy.py
 For future KrakenTools scripts, this program generates a single text file
 that contains all of the taxonomy information required. This program is intended to 
@@ -308,6 +315,7 @@ the `names.dmp` file or the name designated as `scientific name`.
 ## 4. KrakenTools scripts requiring make\_ktaxonomy.py output:
 1. [make\_kreport.py](#make\_kreportpy)
 
+---------------------------------------------------------
 # make\_kreport.py 
 This program will generate a kraken-style report file from the kraken output file. 
 Currently, this only generates reports for Kraken 1 or Kraken 2. This program
@@ -352,9 +360,9 @@ file contains 6 tab-delimited columns as follows:
 6. Name (preceeded by spaces to indicate distance from root) 
 
 
-
+---------------------------------------------------------
 # Author Information 
 Jennifer Lu
 jennifer.lu717@gmail.com
 jlu26@jhmi.edu 
-Page Updated: 2020/04/19
+Page Updated: 2020/05/10
