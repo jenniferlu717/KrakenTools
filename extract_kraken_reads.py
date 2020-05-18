@@ -212,6 +212,7 @@ def main():
                 continue 
             #tree root
             if taxid == 1:
+                level_id = 'R'
                 root_node = Tree(taxid, level_num, level_id)
                 prev_node = root_node
                 #save if needed
