@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #################################################################
 #filter_bracken_out.py allows users to filter Bracken output files 
-#Copyright (C) 2019 Jennifer Lu, jlu26@jhmi.edu
+#Copyright (C) 2019-2020 Jennifer Lu, jlu26@jhmi.edu
 #
 #This file is part of Kraken-Tools.
 #Kraken-Tools is free software; you can redistribute it and/or modify

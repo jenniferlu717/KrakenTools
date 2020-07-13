@@ -2,7 +2,7 @@
 ################################################################
 #combine_kreports.py takes multiple kraken-style reports and combines
 #them into a single report file
-#Copyright (C) 2019 Jennifer Lu, jlu26@jhmi.edu
+#Copyright (C) 2019-2020 Jennifer Lu, jlu26@jhmi.edu
 #
 #This file is part of KrakenTools
 #KrakenTools is free software; you can redistribute it and/or modify

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ####################################################################
 #kreport2krona.py converts a Kraken-style report into Krona-compatible format
-#Copyright (C) 2019 Jennifer Lu, jlu26@jhmi.edu
+#Copyright (C) 2019-2020 Jennifer Lu, jlu26@jhmi.edu
 
 #This file is part of KrakenTools.
 #KrakenTools is free software; you can redistribute it and/or modify
