@@ -20,10 +20,12 @@ This github repository is dedicated to only the scripts provided here.
 1. [extract\_kraken\_reads.py](#extract\_kraken\_readspy)
 2. [combine\_kreports.py](#combine\_kreportspy)
 3. [kreport2krona.py](#kreport2kronapy)
-4. [filter\_bracken\_out.py](#filter\_bracken\_outy)
-5. [fix\_unmapped.py](#fix\_unmappedpy)
-6. [make\_ktaxonomy.py](#make\_ktaxonomypy)
-7. [make\_kreport.py](#make\_kreportpy)
+4. [kreport2mpa.py](#kreport2mpapy)
+5. [combine\_mpa.py](#combine\_mpapy)
+6. [filter\_bracken\_out.py](#filter\_bracken\_outy)
+7. [fix\_unmapped.py](#fix\_unmappedpy)
+8. [make\_ktaxonomy.py](#make\_ktaxonomypy)
+9. [make\_kreport.py](#make\_kreportpy)
 
 # Running Scripts:
 No installation required. 
@@ -166,8 +168,8 @@ This program takes a Kraken report file and prints out a krona-compatible TEXT f
 *    `-o/--output MYFILE.KRONA..........`Output Krona text file
     
 Optional:
-*    `--no-intermediate-ranks...........`only output standard levels [D,P,C,O,F,G,S] 
-*    `--intermediate-ranks..............`[default] include non-standard levels
+*    `--no-intermediate-ranks...........`[default]only output standard levels [D,P,C,O,F,G,S] 
+*    `--intermediate-ranks..............`include non-standard levels
 
 ## 2. kreport2krona.py example usage
     
@@ -177,6 +179,99 @@ Optional:
     ktImportText MYSAMPLE.krona -o MYSAMPLE.krona.html
     
 Krona information: see https://github.com/marbl/Krona. 
+
+## 3. kreport2krona.py example output 
+
+`--no-intermediate-ranks`
+        
+        6298        Unclassified
+        8           k__Bacteria
+        4           k__Bacteria     p_Proteobacteria
+        6           k__Bacteria     p_Proteobacteria    c__Gammaproteobacteria
+        ...
+
+
+`--intermediate-ranks`
+
+        6298        Unclassified
+        79          x__root
+        0           x__root     x__cellular_organisms
+        8           x__root     x__cellular organisms   k__Bacteria
+        4           x__root     x__cellular organisms   k__Bacteria     p__Proteobacteria
+        6           x__root     x__cellular organisms   k__Bacteria     p__Proteobacteria   c__Gammaproteobacteria
+        ....
+
+---------------------------------------------------------
+# kreport2mpa.py 
+
+This program takes a Kraken report file and prints out a mpa (MetaPhlAn) -style TEXT file
+
+## 1. kreport2mpa.py usage/options
+    
+`python kreport2mpa.py`
+*    `-r/--report MYFILE.KREPORT........`Kraken report file 
+*    `-o/--output MYFILE.MPA.TXT........`Output MPA-STYLE text file
+    
+Optional:
+*    `--display-header..................`display header line (#Classification, MYFILE.KREPORT) [default: no header]
+*    `--no-intermediate-ranks...........`[default] only output standard levels [D,P,C,O,F,G,S] 
+*    `--intermediate-ranks..............`include non-standard levels
+*    `--read-count......................`[default] use read count for output
+*    `--percentages.....................`use percentage of total reads for output 
+
+## 2. kreport2mpa.py example usage
+    
+    kraken2 --db KRAKEN2DB --threads THREADNUM --report MYSAMPLE.KREPORT \
+        --paired SAMPLE_1.FASTA SAMPLE_2.FASTA > MYSAMPLE.KRAKEN2
+    python kreport2mpa.py -r MYSAMPLE.KREPORT -o MYSAMPLE.MPA.TXT 
+    
+## 3. kreport2mpa.py example output 
+
+The output will contain one tab character inbetween the classification and the read count.
+
+`--no-intermediate-ranks/--read-count` 
+        
+        #Classification                                           SAMPLE.KREPORT
+        k__Bacteria                                               36569
+        k__Bacteria|p__Proteobacteria                             21001
+        k__Bacteria|p__Proteobacteria|c__Gammaproteobacteria      11648
+        ... 
+
+`--intermediate-ranks/--read-count`
+        
+        #Classification                                           SAMPLE.KREPORT
+        x__cellular_organisms                                     38462
+        x__cellular_organisms|k__Bacteria                         36569 
+        x__cellular_organisms|k__Bacteria|p__Proteobacteria       21001
+        ... 
+
+---------------------------------------------------------
+# combine\_mpa.py 
+
+This program combines multiple outputs from [kreport2mpa.py](#kreport2mpapy).
+Files to be combined must have been generated using the same kreport2mpa.py options.
+
+**Important:** 
+1. Input files to combine\_mpa.py cannot be a mix of intermediate/no intermediate rank outputs.
+2. Input files should be generated using the same Kraken database. 
+3. Input files cannot be a mix of read counts/percentage kreport2mpa.py outputs.
+**combine**\_**mpa.py** will not test the input files prior to combining. 
+
+If no header is in a given sample file, the program will number the files "Sample #1", "Sample #2", etc. 
+
+## 1. combine\_mpa.py usage/options
+    
+`python combine_mpa.py`
+*    `-i/--input MYFILE1.MPA MYFILE2.MPA.......`Multiple MPA-STYLE text files (separated by spaces) 
+*    `-o/--output MYFILE.COMBINED.MPA..........`Output MPA-STYLE text file
+    
+## 2. combine\_mpa.py example output 
+
+        #Classification                                           Sample #1    Sample #2
+        k__Bacteria                                               36569         20034
+        k__Bacteria|p__Proteobacteria                             21001         18023
+        k__Bacteria|p__Proteobacteria|c__Gammaproteobacteria      11648         15000
+
 
 ---------------------------------------------------------
 # filter\_bracken\_out.py

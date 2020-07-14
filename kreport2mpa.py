@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 ####################################################################
 #kreport2mpa.py converts a Kraken-style report into mpa [MetaPhlAn) format
-#Copyright (C) 2017-2020 Jennifer Lu, jlu26@jhmi.edu
+#Copyright (C) 2017-2020 Jennifer Lu, jennifer.lu717@gmail.com
 
 #This file is part of KrakenTools.
 #KrakenTools is free software; you can redistribute it and/or modify
@@ -71,6 +71,7 @@ def process_kraken_report(curr_str):
         int(split_str[1])
     except ValueError:
         return []
+    percents = float(split_str[0])
     all_reads = int(split_str[1])
     level_type = split_str[3]
     #Get name and spaces 
@@ -82,9 +83,10 @@ def process_kraken_report(curr_str):
             spaces += 1
         else:
             break
+    name = name.replace(' ','_')
     #Determine level based on number of spaces
     level_num = spaces/2
-    return [name, level_num, level_type, all_reads]
+    return [name, level_num, level_type, all_reads, percents]
 
 #Main method
 def main():
@@ -96,13 +98,19 @@ def main():
         dest='o_file', help='Output mpa-report file name')
     parser.add_argument('--display-header', action='store_true', 
         dest='add_header', default=False, required=False,
-        help='Include header [Kraken report filename] in mpa-report file') 
+        help='Include header [Kraken report filename] in mpa-report file [default: no header]') 
+    parser.add_argument('--read_count', action='store_true',
+        dest='use_reads', default=True, required=False,
+        help='Use read count for output [default]')
+    parser.add_argument('--percentages', action='store_false',
+        dest='use_reads', default=True, required=False,
+        help='Use percentages for output [instead of reads]')
     parser.add_argument('--intermediate-ranks', action='store_true',
         dest='x_include', default=False, required=False,
         help='Include non-traditional taxonomic ranks in output')
     parser.add_argument('--no-intermediate-ranks', action='store_false',
         dest='x_include', default=False, required=False,
-        help='Do not include non-traditional taxonomic ranks in output')
+        help='Do not include non-traditional taxonomic ranks in output [default]')
     args=parser.parse_args()
 
     #Process report file and output 
@@ -119,10 +127,10 @@ def main():
     for line in r_file:
         report_vals = process_kraken_report(line)
         #If header line, skip
-        if len(report_vals) < 4: 
+        if len(report_vals) < 5: 
             continue
         #Get relevant information from the line 
-        [name, level_num, level_type, all_reads] = report_vals
+        [name, level_num, level_type, all_reads, percents] = report_vals
         if level_type == 'U':
             continue
         #Create level name 
@@ -132,7 +140,7 @@ def main():
             level_type = "k"
         elif level_type == "D":
             level_type = "k"
-        level_str = level_type.lower() + "_" + name
+        level_str = level_type.lower() + "__" + name
         #Determine full string to add
         if prev_lvl_num == -1:
             #First level
@@ -151,7 +159,10 @@ def main():
                         if string[0] != "r": 
                             o_file.write(string + "|")
                 #Print final level and then number of reads
-                o_file.write(level_str + "\t" + str(all_reads) + "\n")
+                if args.use_reads:
+                    o_file.write(level_str + "\t" + str(all_reads) + "\n")
+                else:
+                    o_file.write(level_str + "\t" + str(percents) + "\n")
             #Update
             curr_path.append(level_str)
             prev_lvl_num = level_num

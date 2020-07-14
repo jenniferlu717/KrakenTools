@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ####################################################################
 #kreport2krona.py converts a Kraken-style report into Krona-compatible format
-#Copyright (C) 2019-2020 Jennifer Lu, jlu26@jhmi.edu
+#Copyright (C) 2019-2020 Jennifer Lu, jennifer.lu717@gmail.com
 
 #This file is part of KrakenTools.
 #KrakenTools is free software; you can redistribute it and/or modify
@@ -80,6 +80,7 @@ def process_kraken_report(curr_str):
             spaces += 1
         else:
             break
+    name = name.replace(' ','_')
     #Determine level based on number of spaces
     level_num = spaces/2
     return [name, level_num, level_type, lvl_reads]
@@ -162,8 +163,8 @@ def kreport2krona_main(report_file, out_file):
         #Get relevant information from the line 
         [name, level_num, level_type, lvl_reads] = report_vals
         if level_type == 'U':
-            num2path[line_num] = ["u_Unclassified"]
-            path2reads["u_Unclassified"] = lvl_reads 
+            num2path[line_num] = ["Unclassified"]
+            path2reads["Unclassified"] = lvl_reads 
             continue
         #########################################
         #Create level name 
@@ -221,7 +222,8 @@ def kreport2krona_main(report_file, out_file):
         curr_path = num2path[i] 
         if len(curr_path) > 0:
             curr_reads = path2reads[curr_path[-1]] 
-            o_file.write("%i" % curr_reads)
+            if curr_path[-1][0] != "x":
+                o_file.write("%i" % curr_reads)
             for name in curr_path:
                 if name[0] != "r" and name[0] != "x":
                     o_file.write("\t%s" % name)

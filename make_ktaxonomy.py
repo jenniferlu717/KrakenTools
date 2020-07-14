@@ -2,7 +2,7 @@
 ######################################################################
 #make_taxonomy.py takes in three files: nodes.dmp, names.dmp, and 
 #seqid2taxid.map to create a condensed taxonomy file 
-#Copyright (C) 2020 Jennifer Lu, jlu26@jhmi.edu
+#Copyright (C) 2020 Jennifer Lu, jennifer.lu717@gmail.com
 #
 #This file is part of KrakenTools
 #KrakenTools is free software; oyu can redistribute it and/or modify

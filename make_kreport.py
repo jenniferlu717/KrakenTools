@@ -2,7 +2,7 @@
 ######################################################################
 #make_kreport.py takes in the kraken output file and the make_ktaxonomy.py 
 #output file to generate a kraken report file 
-#Copyright (C) 2020 Jennifer Lu, jlu26@jhmi.edu
+#Copyright (C) 2020 Jennifer Lu, jennifer.lu717@gmail.com
 #
 #This file is part of KrakenTools
 #KrakenTools is free software; oyu can redistribute it and/or modify

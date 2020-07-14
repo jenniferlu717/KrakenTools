@@ -2,7 +2,7 @@
 ####################################################################
 #fix_unmapped.py analyzes a text file of accession IDs and maps them
 #to their respective taxonomy IDs given accession2taxid files. 
-#Copyright (C) 2020 Jennifer Lu, jlu26@jhmi.edu
+#Copyright (C) 2020 Jennifer Lu, jennifer.lu717@gmail.com
 #
 #This file is part of KrakenTools
 #KrakenTools is free software; you can redistribute it and/or modify
