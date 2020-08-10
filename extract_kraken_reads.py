@@ -2,7 +2,7 @@
 ######################################################################
 #extract_kraken_reads.py takes in a kraken-style output and kraken report
 #and a taxonomy level to extract reads matching that level
-#Copyright (C) 2019 Jennifer Lu, jlu26@jhmi.edu
+#Copyright (C) 2019-2020 Jennifer Lu, jennifer.lu717@gmail.com
 #
 #This file is part of KrakenTools
 #KrakenTools is free software; oyu can redistribute it and/or modify
@@ -212,6 +212,7 @@ def main():
                 continue
             #tree root
             if taxid == 1:
+                level_id = 'R'
                 root_node = Tree(taxid, level_num, level_id)
                 prev_node = root_node
                 #save if needed
@@ -302,7 +303,6 @@ def main():
     k_file.close()
     sys.stdout.write('\r\t%0.2f million reads processed\n' % float(count_kraken/1000000.))
     sys.stdout.write('\t%i read IDs saved\n' % len(save_readids))
-    #print(save_readids[read_id])
     ##############################################################################
     #Sequence files
     seq_file1 = args.seq_file1
@@ -364,8 +364,6 @@ def main():
             #Print update
             sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
             sys.stdout.flush()
-        #else:
-            #print(test_id)
             #Save to file
             if args.fastq_out:
                 SeqIO.write(record, o_file, "fastq")
@@ -408,7 +406,7 @@ def main():
         o_file2.close()
         #End Program
         sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)\n' % (count_output, float(count_seqs/1000000.)))
-
+    
     #End Program
     sys.stdout.write('\t' + str(count_output) + ' reads printed to file\n')
     sys.stdout.write('\tGenerated file: %s\n' % args.output_file)
