@@ -2,7 +2,7 @@
 ######################################################################
 #extract_kraken_reads.py takes in a kraken-style output and kraken report
 #and a taxonomy level to extract reads matching that level
-#Copyright (C) 2019-2020 Jennifer Lu, jennifer.lu717@gmail.com
+#Copyright (C) 2019 Jennifer Lu, jlu26@jhmi.edu
 #
 #This file is part of KrakenTools
 #KrakenTools is free software; oyu can redistribute it and/or modify
@@ -11,8 +11,8 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of 
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #GNU General Public License for more details.
 #
 #You should have received a copy of the GNU General Public License
@@ -22,31 +22,31 @@
 #Jennifer Lu, jlu26@jhmi.edu
 #Updated: 06/03/2019
 #
-#This program extracts reads classified by Kraken as a 
+#This program extracts reads classified by Kraken as a
 #specified taxonomy ID. Those reads are extracted into a new FASTA file.
 #
 #Required Parameters:
 #   -k, --kraken, --kraken-file X.......kraken output file
-#   -s, -s1, -1, -U X...................read file 
+#   -s, -s1, -1, -U X...................read file
 #                                       [FASTA/FASTQ - may be gzipped]
-#   -s2, -2, X..........................second read file if paired 
+#   -s2, -2, X..........................second read file if paired
 #                                       [FASTA/FASTQ - may be gzipped]
-#   -o, --output X......................output FASTA file with reads 
-#   -t, --taxid, --taxids X.............list of taxonomy IDs to extract 
+#   -o, --output X......................output FASTA file with reads
+#   -t, --taxid, --taxids X.............list of taxonomy IDs to extract
 #                                       [separated by spaces]
 #   -r, --report-file X.................kraken report file
 #                                       [required only with --include-children/parents]
 #Optional Parameters:
 #   -h, --help..........................show help message.
 #   --max X.............................only save the first X reads found
-#   --include-children **...............include reads classified at lower levels 
-#   --include-parents **................include reads classified at parent levels 
-#                                       of taxids 
+#   --include-children **...............include reads classified at lower levels
+#   --include-parents **................include reads classified at parent levels
+#                                       of taxids
 #   --append............................append extracted reads to output file if existing
-#   --noappend..........................rewrite file if existing [default] 
+#   --noappend..........................rewrite file if existing [default]
 #   --exclude...........................exclude the taxids specified
 # ** by default, only reads classified exactly at taxids provided will be extracted
-# ** if either of these are specified, a report file must also be provided 
+# ** if either of these are specified, a report file must also be provided
 ######################################################################
 import os, sys, argparse
 import gzip
@@ -56,8 +56,8 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 #################################################################################
-#Tree Class 
-#usage: tree node used in constructing taxonomy tree  
+#Tree Class
+#usage: tree node used in constructing taxonomy tree
 #   includes only taxonomy levels and genomes identified in the Kraken report
 class Tree(object):
     'Tree node.'
@@ -78,7 +78,7 @@ class Tree(object):
 #usage: parses single line from kraken output and returns taxonomy ID and readID
 #input: kraken output file with readid and taxid in the
 #   second and third tab-delimited columns
-#returns: 
+#returns:
 #   - taxonomy ID
 #   - read ID
 def process_kraken_output(kraken_line):
@@ -109,9 +109,9 @@ def process_kraken_output(kraken_line):
 #   - taxonomy ID (0 = unclassified, 1 = root, 2 = Bacteria...etc)
 #   - spaces + name
 #returns:
-#   - taxonomy ID 
+#   - taxonomy ID
 #   - level number (number of spaces before name)
-#   - level_type (type of taxonomy level - U, R, D, P, C, O, F, G, S, etc) 
+#   - level_type (type of taxonomy level - U, R, D, P, C, O, F, G, S, etc)
 def process_kraken_report(report_line):
     l_vals = report_line.strip().split('\t')
     try:
@@ -131,7 +131,7 @@ def process_kraken_report(report_line):
     level_num = int(spaces/2)
     return[taxid, level_num, level_type]
 #################################################################################
-#Main method 
+#Main method
 def main():
     #Parse arguments
     parser = argparse.ArgumentParser()
@@ -147,20 +147,20 @@ def main():
     parser.add_argument('-o', "--output",dest='output_file', required=True,
         help='Output FASTA/Q file containing the reads and sample IDs')
     parser.add_argument('-o2',"--output2", dest='output_file2', required=False, default='',
-        help='Output FASTA/Q file containig the second pair of reads [required for paired input]') 
+        help='Output FASTA/Q file containig the second pair of reads [required for paired input]')
     parser.add_argument('--append', dest='append', action='store_true',
         help='Append the sequences to the end of the output FASTA file specified.')
     parser.add_argument('--noappend', dest='append', action='store_false',
         help='Create a new FASTA file containing sample sequences and IDs \
               (rewrite if existing) [default].')
-    parser.add_argument('--max', dest='max_reads', required=False, 
+    parser.add_argument('--max', dest='max_reads', required=False,
         default=100000000, type=int,
         help='Maximum number of reads to save [default: 100,000,000]')
     parser.add_argument('-r','--report',dest='report_file', required=False,
         default="",
         help='Kraken report file. [required only if --include-parents/children \
         is specified]')
-    parser.add_argument('--include-parents',dest="parents", required=False, 
+    parser.add_argument('--include-parents',dest="parents", required=False,
         action='store_true',default=False,
         help='Include reads classified at parent levels of the specified taxids')
     parser.add_argument('--include-children',dest='children', required=False,
@@ -168,19 +168,19 @@ def main():
         help='Include reads classified more specifically than the specified taxids')
     parser.add_argument('--exclude', dest='exclude', required=False,
         action='store_true',default=False,
-        help='Instead of finding reads matching specified taxids, finds all reads NOT matching specified taxids') 
+        help='Instead of finding reads matching specified taxids, finds all reads NOT matching specified taxids')
     parser.add_argument('--fastq-output', dest='fastq_out', required=False,
         action='store_true',default=False,
         help='Print output FASTQ reads [requires input FASTQ, default: output is FASTA]')
     parser.set_defaults(append=False)
 
     args=parser.parse_args()
-    
+
     #Start Program
     time = strftime("%m-%d-%Y %H:%M:%S", gmtime())
     sys.stdout.write("PROGRAM START TIME: " + time + '\n')
-    
-    #Check input 
+
+    #Check input
     if (len(args.output_file2) == 0) and (len(args.seq_file2) > 0):
         sys.stderr.write("Must specify second output file -o2 for paired input\n")
         exit(1)
@@ -191,15 +191,15 @@ def main():
         save_taxids[int(tid)] = 0
     main_lvls = ['R','K','D','P','C','O','F','G','S']
 
-    #STEP 0: READ IN REPORT FILE AND GET ALL TAXIDS 
+    #STEP 0: READ IN REPORT FILE AND GET ALL TAXIDS
     if args.parents or args.children:
         #check that report file exists
-        if args.report_file == "": 
+        if args.report_file == "":
             sys.stderr.write(">> ERROR: --report not specified.")
             exit(1)
         sys.stdout.write(">> STEP 0: PARSING REPORT FILE %s\n" % args.report_file)
-        #create tree and save nodes with taxids in the list 
-        base_nodes = {} 
+        #create tree and save nodes with taxids in the list
+        base_nodes = {}
         r_file = open(args.report_file,'r')
         prev_node = -1
         for line in r_file:
@@ -209,10 +209,9 @@ def main():
                 continue
             [taxid, level_num, level_id] = report_vals
             if taxid == 0:
-                continue 
+                continue
             #tree root
             if taxid == 1:
-                level_id = 'R'
                 root_node = Tree(taxid, level_num, level_id)
                 prev_node = root_node
                 #save if needed
@@ -221,8 +220,8 @@ def main():
                 continue
             #move to correct parent
             while level_num != (prev_node.level_num + 1):
-                prev_node = prev_node.parent 
-            #determine correct level ID 
+                prev_node = prev_node.parent
+            #determine correct level ID
             if level_id == '-' or len(level_id) > 1:
                 if prev_node.level_id in main_lvls:
                     level_id = prev_node.level_id + '1'
@@ -235,17 +234,17 @@ def main():
             prev_node = curr_node
             #save if taxid matches
             if taxid in save_taxids:
-                base_nodes[taxid] = curr_node 
+                base_nodes[taxid] = curr_node
         r_file.close()
         #FOR SAVING PARENTS
         if args.parents:
-            #For each node saved, traverse up the tree and save each taxid 
+            #For each node saved, traverse up the tree and save each taxid
             for tid in base_nodes:
                 curr_node = base_nodes[tid]
                 while curr_node.parent != None:
                     curr_node = curr_node.parent
                     save_taxids[curr_node.taxid] = 0
-        #FOR SAVING CHILDREN 
+        #FOR SAVING CHILDREN
         if args.children:
             for tid in base_nodes:
                 curr_nodes = base_nodes[tid].children
@@ -258,24 +257,24 @@ def main():
                     if curr_n.children != None:
                         for child in curr_n.children:
                             curr_nodes.append(child)
-                    
+
     ##############################################################################
     sys.stdout.write("\t%i taxonomy IDs to parse\n" % len(save_taxids))
     sys.stdout.write(">> STEP 1: PARSING KRAKEN FILE FOR READIDS %s\n" % args.kraken_file)
     #Initialize values
     count_kraken = 0
     read_line = -1
-    exclude_taxids = {} 
+    exclude_taxids = {}
     if args.exclude:
-        exclude_taxids = save_taxids 
-        save_taxids = {} 
+        exclude_taxids = save_taxids
+        save_taxids = {}
     #PROCESS KRAKEN FILE FOR CLASSIFIED READ IDS
     k_file = open(args.kraken_file, 'r')
     sys.stdout.write('\t0 reads processed')
     sys.stdout.flush()
     #Evaluate each sample in the kraken file
     save_readids = {}
-    save_readids2 = {} 
+    save_readids2 = {}
     for line in k_file:
         count_kraken += 1
         if (count_kraken % 10000 == 0):
@@ -289,20 +288,21 @@ def main():
         if (tax_id in save_taxids) and not args.exclude:
             save_taxids[tax_id] += 1
             save_readids2[read_id] = 0
-            save_readids[read_id] = 0 
+            save_readids[read_id] = 0
         elif (tax_id not in exclude_taxids) and args.exclude:
             if tax_id not in save_taxids:
                 save_taxids[tax_id] = 1
             else:
                 save_taxids[tax_id] += 1
             save_readids2[read_id] = 0
-            save_readids[read_id] = 0 
+            save_readids[read_id] = 0
         if len(save_readids) >= args.max_reads:
-            break 
+            break
     #Update user
     k_file.close()
     sys.stdout.write('\r\t%0.2f million reads processed\n' % float(count_kraken/1000000.))
     sys.stdout.write('\t%i read IDs saved\n' % len(save_readids))
+    #print(save_readids[read_id])
     ##############################################################################
     #Sequence files
     seq_file1 = args.seq_file1
@@ -347,7 +347,7 @@ def main():
         o_file = open(args.output_file, 'w')
         if args.output_file2 != '':
             o_file2 = open(args.output_file2, 'w')
-    #Process SEQUENCE 1 file 
+    #Process SEQUENCE 1 file
     count_seqs = 0
     count_output = 0
     for record in SeqIO.parse(s_file1,filetype):
@@ -356,22 +356,22 @@ def main():
         if (count_seqs % 1000 == 0):
             sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
             sys.stdout.flush()
-        #Check ID 
+        #Check ID
         test_id = str(record.id)
-        if ("/1" in test_id) or ("/2" in test_id):
-            test_id = test_id[:-2]
         #Sequence found
         if test_id in save_readids:
             count_output += 1
             #Print update
             sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
             sys.stdout.flush()
+        #else:
+            #print(test_id)
             #Save to file
             if args.fastq_out:
                 SeqIO.write(record, o_file, "fastq")
             else:
                 SeqIO.write(record, o_file, "fasta")
-        #If no more reads to find 
+        #If no more reads to find
         if len(save_readids) == count_output:
             break
     #Close files
@@ -391,8 +391,6 @@ def main():
                 sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
                 sys.stdout.flush()
             test_id = str(record.id)
-            if ("/1" in test_id) or ("/2" in test_id):
-                test_id = test_id[:-2]
             #Sequence found
             if test_id in save_readids:
                 count_output += 1
@@ -403,20 +401,20 @@ def main():
                     SeqIO.write(record, o_file2, "fastq")
                 else:
                     SeqIO.write(record, o_file2, "fasta")
-            #If no more reads to find 
+            #If no more reads to find
             if len(save_readids) == count_output:
                 break
         s_file2.close()
         o_file2.close()
         #End Program
         sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)\n' % (count_output, float(count_seqs/1000000.)))
-    
+
     #End Program
     sys.stdout.write('\t' + str(count_output) + ' reads printed to file\n')
     sys.stdout.write('\tGenerated file: %s\n' % args.output_file)
     if args.output_file2 != '':
         sys.stdout.write('\tGenerated file: %s\n' % args.output_file2)
-    
+
     #End of program
     time = strftime("%m-%d-%Y %H:%M:%S", gmtime())
     sys.stdout.write("PROGRAM END TIME: " + time + '\n')
