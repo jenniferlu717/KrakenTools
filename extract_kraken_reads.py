@@ -358,10 +358,11 @@ def main():
             sys.stdout.flush()
         #Check ID 
         test_id = str(record.id)
+        test_id2 = test_id
         if ("/1" in test_id) or ("/2" in test_id):
-            test_id = test_id[:-2]
+            test_id2 = test_id[:-2]
         #Sequence found
-        if test_id in save_readids:
+        if test_id in save_readids or test_id2 in save_readids:
             count_output += 1
             #Print update
             sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
@@ -391,10 +392,11 @@ def main():
                 sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
                 sys.stdout.flush()
             test_id = str(record.id)
+            test_id2 = test_id
             if ("/1" in test_id) or ("/2" in test_id):
-                test_id = test_id[:-2]
+                test_id2 = test_id[:-2]
             #Sequence found
-            if test_id in save_readids:
+            if test_id in save_readids or test_id2 in save_readids:
                 count_output += 1
                 sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
                 sys.stdout.flush()
