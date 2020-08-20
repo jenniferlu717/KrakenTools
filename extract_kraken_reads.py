@@ -380,9 +380,9 @@ def main():
     o_file.close()
     sys.stdout.write('\r\t%i read IDs found (%0.2f mill reads processed)\n' % (count_output, float(count_seqs/1000000.)))
     sys.stdout.flush()
-    count_output = 0
-    count_seqs = 0
     if len(seq_file2) > 0:
+        count_output = 0
+        count_seqs = 0
         sys.stdout.write('\t%i read IDs found (%0.2f mill reads processed)' % (count_output, float(count_seqs/1000000.)))
         sys.stdout.flush()
         for record in SeqIO.parse(s_file2, filetype):
