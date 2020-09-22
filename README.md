@@ -17,16 +17,16 @@ This github repository is dedicated to only the scripts provided here.
 
 ---------------------------------------------------------
 ## Scripts included in KrakenTools
-1. [extract\_kraken\_reads.py](#extract\_kraken\_readspy)
-2. [combine\_kreports.py](#combine\_kreportspy)
-3. [kreport2krona.py](#kreport2kronapy)
-4. [kreport2mpa.py](#kreport2mpapy)
-4. [kraken2\_translate.py](#kraken2\_translatepy)
-5. [combine\_mpa.py](#combine\_mpapy)
-6. [filter\_bracken\_out.py](#filter\_bracken\_outpy)
-7. [fix\_unmapped.py](#fix\_unmappedpy)
-8. [make\_ktaxonomy.py](#make\_ktaxonomypy)
-9. [make\_kreport.py](#make\_kreportpy)
+- [extract\_kraken\_reads.py](#extract\_kraken\_readspy)
+- [combine\_kreports.py](#combine\_kreportspy)
+- [kreport2krona.py](#kreport2kronapy)
+- [kreport2mpa.py](#kreport2mpapy)
+- [kraken2\_translate.py](#kraken2\_translatepy)
+- [combine\_mpa.py](#combine\_mpapy)
+- [filter\_bracken\_out.py](#filter\_bracken\_outpy)
+- [fix\_unmapped.py](#fix\_unmappedpy)
+- [make\_ktaxonomy.py](#make\_ktaxonomypy)
+- [make\_kreport.py](#make\_kreportpy)
 
 # Running Scripts:
 No installation required.
