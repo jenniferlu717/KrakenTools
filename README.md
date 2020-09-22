@@ -1,9 +1,7 @@
 # Kraken Tools
 For news and updates, refer to the github page: https://github.com/jenniferlu717/KrakenTools/
 
-KrakenTools is a suite of scripts to be used for post-analysis of
-Kraken/KrakenUniq/Kraken2/Bracken results. Please cite the relevant paper
-if using KrakenTools with any of the listed programs.
+KrakenTools is a suite of scripts to be used for post-analysis of Kraken/KrakenUniq/Kraken2/Bracken results. Please cite the relevant paper if using KrakenTools with any of the listed programs.
 
 ## Links to Kraken github pages
 - [Kraken 1](https://github.com/DerrickWood/kraken)
@@ -11,9 +9,7 @@ if using KrakenTools with any of the listed programs.
 - [KrakenUniq](https://github.com/fbreitwieser/krakenuniq)
 - [Bracken](https://github.com/jenniferlu717/Bracken)
 
-For issues with any of the above programs,
-please open a github issue on their respective github pages.
-This github repository is dedicated to only the scripts provided here.
+For issues with any of the above programs, please open a github issue on their respective github pages. This github repository is dedicated to only the scripts provided here.
 
 ---------------------------------------------------------
 ## Scripts included in KrakenTools
@@ -40,9 +36,7 @@ Users can make scripts executable by running
 ---------------------------------------------------------
 # extract\_kraken\_reads.py
 
-This program_ extract reads classified at any user-specified taxonomy IDs. User
-must specify the Kraken output file, the sequence file(s), and at least one
-taxonomy ID. Additional options are specified below.
+This program_ extract reads classified at any user-specified taxonomy IDs. User must specify the Kraken output file, the sequence file(s), and at least one taxonomy ID. Additional options are specified below:
 
 <details>
     <summary>
@@ -74,10 +68,7 @@ Optional:
         <b>input files</b>
     </summary>
 
-Input sequence files must be either FASTQ or FASTA files. Input files
-can be gzipped or not. The program will automatically detect whether
-the file is gzipped and whether it is FASTQ or FASTA formatted based on
-the first character in the file (">" for FASTA, "@" for FASTQ)
+Input sequence files must be either FASTQ or FASTA files. Input files can be gzipped or not. The program will automatically detect whether the file is gzipped and whether it is FASTQ or FASTA formatted based on the first character in the file (">" for FASTA, "@" for FASTQ)
 
 </details>
 
@@ -86,13 +77,11 @@ the first character in the file (">" for FASTA, "@" for FASTQ)
         <b>input/output</b>
     </summary>
 
-Users that ran Kraken using paired reads should input both read files into
-extract\_kraken\_reads.py as follows:
+Users that ran Kraken using paired reads should input both read files into extract\_kraken\_reads.py as follows:
 
     extract_kraken_reads.py -k myfile.kraken -s1 read1.fq -s2 reads2.fq
 
-Given paired reads, the script requires users to provide two output file
-names to contain extracted reads:
+Given paired reads, the script requires users to provide two output file names to contain extracted reads:
 
     extract_kraken_reads.py -k myfile.kraken -s1 read1.fq -s2 reads2.fq -o extracted1.fq -o2 extracted2.fq
 
@@ -119,10 +108,7 @@ For example:
         <b>--include-parents/--include-children flags</b>
     </summary>
 
-By default, only reads classified exactly at the specified taxonomy IDs
-will be extracted. Options --include-children and --include parents can be
-used to extract reads classified within the same lineage as a specified
-taxonomy ID. For example, given a Kraken report containing the following:
+By default, only reads classified exactly at the specified taxonomy IDs will be extracted. Options --include-children and --include parents can be used to extract reads classified within the same lineage as a specified taxonomy ID. For example, given a Kraken report containing the following:
 
         [%]     [reads] [lreads][lvl]   [tid]       [name]
         100     1000    0       R       1           root
@@ -411,17 +397,11 @@ This program takes the output file of a Bracken report and filters the desired t
 *   `--include TID TID2.................`taxonomy IDs to include in output file [space-delimited]
 *   `--exclude TID TID2.................`taxonomy IDs to exclude in output file [space-delimited]
 
-User should specify either taxonomy IDs with `--include` or `--exclude`. If
-both are specified, taxonomy IDs should not be in both lists and only
-taxonomies to include will be evaluated.
+User should specify either taxonomy IDs with `--include` or `--exclude`. If both are specified, taxonomy IDs should not be in both lists and only taxonomies to include will be evaluated.
 
-When specifying the --include flag, only lines for the included taxonomy
-IDs will be extracted to the filtered output file. The percentages in the
-filtered file will be re-calculated so the total percentage in the output
-file will sum to 100%.
+When specifying the --include flag, only lines for the included taxonomy IDs will be extracted to the filtered output file. The percentages in the filtered file will be re-calculated so the total percentage in the output file will sum to 100%.
 
-When specifying the --exclude flag alone, all lines in the Bracken file
-will be preserved EXCEPT for the lines matching taxonomy IDs provided.
+When specifying the --exclude flag alone, all lines in the Bracken file will be preserved EXCEPT for the lines matching taxonomy IDs provided.
 </details>
 
 <details>
@@ -429,8 +409,7 @@ will be preserved EXCEPT for the lines matching taxonomy IDs provided.
         <b>example usage</b>
     </summary>
 
-This program can be useful for isolating a subset of species to
-better understand the distribution of those particular species in the sample.
+This program can be useful for isolating a subset of species to better understand the distribution of those particular species in the sample.
 
 For example:
 
@@ -438,10 +417,7 @@ For example:
   39689` will allow users to get the relative percentages of
   _Mycobacterium avium, marinum, tuberculosis, leprae, and gallinarum_ in their samples.
 
-In other cases, users may want to focus on the distribution of all species
-that are NOT the host species in a given sample. This program can then
-recalculate percentage distributions for species when excluding reads for
-the host.
+In other cases, users may want to focus on the distribution of all species that are NOT the host species in a given sample. This program can then recalculate percentage distributions for species when excluding reads for the host.
 
 For example, given this output:
 
@@ -453,12 +429,7 @@ For example, given this output:
         Bordetella pertussis     520         S           ...         ....       20      0.000002
         ...
 
-Users may not be interested in the 999,000 reads that are host DNA, but
-would rather know the percentage of non-host reads for each of the non-host
-species.  Using `python filter_bracken_out.py [options] --exclude 9606`
-allows better resolution of the non-host species, allowing each of the
-fraction of reads to be recalculated out of 1,000 instead of 1,000,000
-reads in the above example. The output would then be:
+Users may not be interested in the 999,000 reads that are host DNA, but would rather know the percentage of non-host reads for each of the non-host species.  Using `python filter_bracken_out.py [options] --exclude 9606` allows better resolution of the non-host species, allowing each of the fraction of reads to be recalculated out of 1,000 instead of 1,000,000 reads in the above example. The output would then be:
 
         name                     tax_id      tax_lvl     kraken....  added...   new.... fraction...
         Streptococcus pyogenes   1314        S           ...         ....       10      0.01000
@@ -470,10 +441,7 @@ reads in the above example. The output would then be:
 
 ---------------------------------------------------------
 # fix\_unmapped.py
-When building a Kraken database, an "unmapped.txt" file may be generated if a
-taxonomy for a given sequence is not found. This script can search through
-any accession2taxid files provided and the unmapped.txt file and generate a
-seqid2taxid.map file to be appended to the one already generated.
+When building a Kraken database, an "unmapped.txt" file may be generated if a taxonomy for a given sequence is not found. This script can search through any accession2taxid files provided and the unmapped.txt file and generate a seqid2taxid.map file to be appended to the one already generated.
 
 <details>
     <summary>
@@ -505,9 +473,7 @@ Optional:
 
 ---------------------------------------------------------
 # make\_ktaxonomy.py
-For future KrakenTools scripts, this program generates a single text file
-that contains all of the taxonomy information required. This program is intended to
-generate a single text taxonomy file for any Kraken 1, Kraken 2, or KrakenUniq database.
+For future KrakenTools scripts, this program generates a single text file that contains all of the taxonomy information required. This program is intended to generate a single text taxonomy file for any Kraken 1, Kraken 2, or KrakenUniq database.
 
 *Important:* The output of this program does not replace any Kraken database file
 (do not replace your taxo.k2d or .db files).
@@ -523,8 +489,7 @@ generate a single text taxonomy file for any Kraken 1, Kraken 2, or KrakenUniq d
 *   `--seqid2taxid seqid2taxid.map........`seqid2taxid.map file generated by kraken-build/kraken2-build/krakenuniq-build when building the database. This is a 2-column tab-delimited file containing sequence IDs and taxonomy IDs.
 *   `-o/--output OUT_FILE.................`Output text file. More details below
 
-The program will inform users if a taxonomy ID is listed in the `seqid2taxid.map`
-file but not in either the `nodes.dmp` or the `names.dmp` files.
+The program will inform users if a taxonomy ID is listed in the `seqid2taxid.map` file but not in either the `nodes.dmp` or the `names.dmp` files.
 </details>
 
 <details>
@@ -541,13 +506,9 @@ Each of the following columns is separated by a tab-vertical line-tab (e.g. `\t|
 4. level number (distance from root)
 5. name
 
-For ranks outside of the traditional taxonomy ranks (R, D, P, C, O, F, G, S),
-the rank type will be assigned based on the closest parent, with a number to specify
-distance from that parent. For example, the strains will be labeled with `S1` while
-ranks inbetween Genus and Species will be labeled with `G1, G2, etc`.
+For ranks outside of the traditional taxonomy ranks (R, D, P, C, O, F, G, S), the rank type will be assigned based on the closest parent, with a number to specify distance from that parent. For example, the strains will be labeled with `S1` while ranks inbetween Genus and Species will be labeled with `G1, G2, etc`.
 
-Currently, names for each node are selected based on the first name listed in
-the `names.dmp` file or the name designated as `scientific name`.
+Currently, names for each node are selected based on the first name listed in the `names.dmp` file or the name designated as `scientific name`.
 `scientific names` will be preferred over all others.
 
 </details>
@@ -571,12 +532,9 @@ KrakenTools scripts requiring [make\_ktaxonomy.py](#make\_ktaxonomypy) output:
 
 ---------------------------------------------------------
 # make\_kreport.py
-This program will generate a kraken-style report file from the kraken output file.
-Currently, this only generates reports for Kraken 1 or Kraken 2. This program
-does not currently work for KrakenUniq output files (to be completed in a future project).
+This program will generate a kraken-style report file from the kraken output file. Currently, this only generates reports for Kraken 1 or Kraken 2. This program does not currently work for KrakenUniq output files (to be completed in a future project).
 
-This program requires that users first generate the taxonomy file
-created by [make\_ktaxonomy.py](#make\ktaxonomypy).
+This program requires that users first generate the taxonomy file created by [make\_ktaxonomy.py](#make\ktaxonomypy).
 
 <details>
     <summary>
@@ -597,9 +555,7 @@ Optional
         <b>example</b>
     </summary>
 
-Given a Kraken 2 database `KRAKENDB/` and sample file `EXAMPLE_READS.fq`,
-the following commands can be used to generate a Kraken report file
-with this script.
+Given a Kraken 2 database `KRAKENDB/` and sample file `EXAMPLE_READS.fq`, the following commands can be used to generate a Kraken report file with this script.
 
     python make_ktaxonomy.py --nodes KRAKENDB/taxonomy/nodes.dmp --names KRAKENDB/taxonomy/names.dmp --seqid2taxid KRAKENDB/seqid2taxid.map -o KRAKENDB/mydb_taxonomy.txt
     kraken2 --db KRAKENDB --threads 4 EXAMPLE_READS.fq > EXAMPLE.kraken2
@@ -611,9 +567,7 @@ with this script.
         <b>--use-read-len option</b>
     </summary>
 
-By default, the output Kraken report will list read counts for each taxonomy ID. However,
-if all read lengths are not the same, users can add the `--use-read-len` option, which will
-result in reporting summed read lengths for each taxon.
+By default, the output Kraken report will list read counts for each taxonomy ID. However, if all read lengths are not the same, users can add the `--use-read-len` option, which will result in reporting summed read lengths for each taxon.
 
 </details>
 
@@ -622,9 +576,7 @@ result in reporting summed read lengths for each taxon.
         <b>output format</b>
     </summary>
 
-The output format for kreport.py is identical to the format generated by
-`kraken-report` or the `--report` switch with `kraken2`. The output
-file contains 6 tab-delimited columns as follows:
+The output format for kreport.py is identical to the format generated by `kraken-report` or the `--report` switch with `kraken2`. The output file contains 6 tab-delimited columns as follows:
 
 1. Percentage of total reads
 2. Reads classified within sub-tree
