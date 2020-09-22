@@ -190,7 +190,7 @@ The output file therefore contains the following tab-delimited columns:
 </details>
 
 ---------------------------------------------------------
-# <div style="display: inline">kreport2krona.py</div>
+# kreport2krona.py
 
 This program takes a Kraken report file and prints out a krona-compatible TEXT file
 
@@ -248,7 +248,7 @@ Krona information: see https://github.com/marbl/Krona.
 </details>
 
 ---------------------------------------------------------
-# <div style="display: inline">kreport2mpa.py</div>
+# kreport2mpa.py
 This program takes a Kraken report file and prints out a mpa (MetaPhlAn) -style TEXT file
 
 <details>
