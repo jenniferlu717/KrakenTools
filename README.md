@@ -6,10 +6,10 @@ Kraken/KrakenUniq/Kraken2/Bracken results. Please cite the relevant paper
 if using KrakenTools with any of the listed programs.
 
 ## Links to Kraken github pages
-1. [Kraken 1](https://github.com/DerrickWood/kraken)
-2. [Kraken 2](https://github.com/DerrickWood/kraken2)
-3. [KrakenUniq](https://github.com/fbreitwieser/krakenuniq)
-4. [Bracken](https://github.com/jenniferlu717/Bracken)
+- [Kraken 1](https://github.com/DerrickWood/kraken)
+- [Kraken 2](https://github.com/DerrickWood/kraken2)
+- [KrakenUniq](https://github.com/fbreitwieser/krakenuniq)
+- [Bracken](https://github.com/jenniferlu717/Bracken)
 
 For issues with any of the above programs,
 please open a github issue on their respective github pages.
