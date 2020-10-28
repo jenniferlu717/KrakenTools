@@ -32,7 +32,7 @@ Users can make scripts executable by running
 # alpha\_diversity.py
 
 This program calculates alpha diversity, from the Bracken abundance estimation file. 
-User must specify Bracken output file, the level of diversity, and type of 
+User must specify Bracken output file, and type of 
 alpha diversity to be calculated. Specific options are specified below. 
 
 ## 1. alpha\_diversity.py usage/options
@@ -63,9 +63,9 @@ By default, the program will calculate Shannon's alpha:
  
 Users can specify which type of alpha diversity from this set:
 
-*   S......Shannon's alpha diversity
+*   S.......Shannon's alpha diversity
 *   BP.....Berger-Parker's alpha
-*   F......Fischer's index
+*   F.......Fischer's index
 
 To calculate berger-parker's alpha:
 
