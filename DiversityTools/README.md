@@ -63,9 +63,9 @@ By default, the program will calculate Shannon's alpha:
  
 Users can specify which type of alpha diversity from this set:
 
-S......Shannon's alpha diversity
-BP.....Berger-Parker's alpha
-F......Fischer's index
+*   S......Shannon's alpha diversity
+*   BP.....Berger-Parker's alpha
+*   F......Fischer's index
 
 To calculate berger-parker's alpha:
 
