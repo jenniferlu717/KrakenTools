@@ -57,13 +57,13 @@ def main():
     if len(args.t_include) == 0 and len(args.t_exclude) == 0:
         sys.stderr.write("User must include at least one taxonomy ID to include or exclude\n")
         sys.stderr.write("Please specify either --include or --exclude\n")
-        exit(1)
+        sys.exit(1)
     #CHECK#2: if both are specified, make sure none exists in both lists
     if len(args.t_include) > 0 and len(args.t_exclude) > 0:
         for val in args.t_include:
             if val in args.t_exclude:
                 sys.stderr.write("%s cannot be in include AND exclude lists\n" % val)
-                exit(1)
+                sys.exit(1)
     include = False
     exclude = False
     if len(args.t_include) > 0:
@@ -85,7 +85,7 @@ def main():
         if first:
             if line.split("\t") != ["name","taxonomy_id","taxonomy_lvl","kraken_assigned_reads","added_reads","new_est_reads","fraction_total_reads"]:
                 sys.stderr.write("\t%s not in Bracken output format\n" % args.in_file)
-                exit(1)
+                sys.exit(1)
             first = False
             firstline = line + "\n"
             continue

@@ -183,7 +183,7 @@ def main():
     #Check input 
     if (len(args.output_file2) == 0) and (len(args.seq_file2) > 0):
         sys.stderr.write("Must specify second output file -o2 for paired input\n")
-        exit(1)
+        sys.exit(1)
 
     #Initialize taxids
     save_taxids = {}
@@ -196,7 +196,7 @@ def main():
         #check that report file exists
         if args.report_file == "": 
             sys.stderr.write(">> ERROR: --report not specified.")
-            exit(1)
+            sys.exit(1)
         sys.stdout.write(">> STEP 0: PARSING REPORT FILE %s\n" % args.report_file)
         #create tree and save nodes with taxids in the list 
         base_nodes = {} 
@@ -313,17 +313,20 @@ def main():
     else:
         s_file1 = open(seq_file1,'rt')
     first = s_file1.readline()
+    if len(first) == 0:
+        sys.stderr.write("ERROR: sequence file's first line is blank\n")
+        sys.exit(1)
     if first[0] == ">":
         filetype = "fasta"
     elif first[0] == "@":
         filetype = "fastq"
     else:
         sys.stderr.write("ERROR: sequence file must be FASTA or FASTQ\n")
-        exit(1)
+        sys.exit(1)
     s_file1.close()
     if filetype != 'fastq' and args.fastq_out:
         sys.stderr.write('ERROR: for FASTQ output, input file must be FASTQ\n')
-        exit(1)
+        sys.exit(1)
     ####ACTUALLY OPEN FILE
     if(seq_file1[-3:] == '.gz'):
         #Zipped Sequence Files
@@ -422,7 +425,7 @@ def main():
     #End of program
     time = strftime("%m-%d-%Y %H:%M:%S", gmtime())
     sys.stdout.write("PROGRAM END TIME: " + time + '\n')
-    exit(0)
+    sys.exit(0)
 
 #################################################################################
 
