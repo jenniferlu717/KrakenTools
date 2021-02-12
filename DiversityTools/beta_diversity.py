@@ -31,7 +31,6 @@
 #Parameters:
 #   -h, --help................show help message.
 #   -i X, --input-files X.....all (at least 2) input files (separated by spaces)
-#   -o X, --output X..........output kraken report filename
 #Input File options (all input files must be of the same format)
 #   --single [default]........all samples are within a single tab-delimited file
 #                             where the first column is the category and the rest are counts
@@ -41,8 +40,6 @@
 #   --kraken..................input files are Kraken reports: col 5=taxonomy, 3=counts
 #   --krona...................input files are Krona format: col 1=counts, 2=taxonomy
 #Input options:
-#   --classification [default] by default, the program will calculate dissimilarities
-#                             across all categories, regardless of taxonomy level
 #   --level [S, G, etc].......user specifies which level to measure at
 #                             (for kraken, krona, or bracken input files)
 ####################################################################
@@ -60,18 +57,14 @@ def main():
         '--inputs', required=True,dest='in_files',nargs='+',
         help='Input files (one per community) for which to compare for \
         bray-curtis dissimiliarity metrics')
-    parser.add_argument('-o','--output', required=False,dest='out_file',
-        default='',
-        help='Output file listing input files followed by a matrix of \
-        dissimilarity values [default: stdout]')
     parser.add_argument('--type', required=False, default='single', dest='filetype',
         choices=['single','simple','bracken','kreport','kreport2','krona'],
         help='Type of input file[s]: single, simple [tab-delimited, specify --cols], \
             bracken, kreport, kreport2, krona. See docs for details')
     parser.add_argument('--cols','--columns', dest='cols',required=False, default='1,2',
         help='Specify category/counts separated by single comma: cat,counts (1 = first col)')
-    parser.add_argument('--level', '-l', dest='lvl', required=False, default='all',
-        help='For Kraken or Krona files, taxonomy level for which to compare samples')
+    parser.add_argument('--level', '-l', dest='lvl', required=False, default='all',choices=['all', 'S', 'G', 'F', 'O'],
+        help='For Kraken or Krona files, taxonomy level for which to compare samples. Default: all')
     args=parser.parse_args()
 
     #################################################
@@ -114,7 +107,7 @@ def main():
         taxlvl_col = 3
     elif args.filetype == "krona":
         categ_col = 1
-        #count_col = 0 # not used
+        count_col = 0
     #################################################
     #STEP 1: READ IN SAMPLES
     i2totals = {}
@@ -124,8 +117,8 @@ def main():
     num_categories = 0
     if args.filetype == "single":
         #ALL SAMPLE COUNTS WITHIN A SINGLE FILE
-        sys.stdout.write(">>STEP 1: READING INPUT FILE\n")
-        sys.stdout.write("\t....reading line 1 as header\n")
+        #sys.stdout.write(">>STEP 1: READING INPUT FILE\n")
+        #sys.stdout.write("\t....reading line 1 as header\n")
         header = True
         i_file = open(args.in_files[0],'r')
         for line in i_file:
@@ -140,7 +133,7 @@ def main():
                     s_count += 1
                 num_samples = s_count
                 header = False
-                sys.stdout.write("\t....reading %i samples\n" % s_count)
+                #sys.stdout.write("\t....reading %i samples\n" % s_count)
             else:
                 #Otherwise, save_counts
                 s_count = 0
@@ -152,7 +145,7 @@ def main():
                     s_count += 1
                 num_categories += 1
         i_file.close()
-        sys.stdout.write("\t....finished reading counts for %i samples in %i categories\n" % (num_samples,num_categories))
+        #sys.stdout.write("\t....finished reading counts for %i samples in %i categories\n" % (num_samples,num_categories))
     else: # for braken, kraken, kraken2 and krona
         num_samples = 0
         i2names = {}
@@ -179,7 +172,7 @@ def main():
                         # we don't know which column will be the genus type (might change for every line)
                         # hence, we iterate over it
                         for i in range(count_col, len(l_vals)):
-                            if l_vals[i].startswith("g__"):
+                            if l_vals[i].startswith(args.lvl.lower() + "__") or args.lvl == "all":
                                 categ_col = i
                                 tax_name = l_vals[categ_col]
                                 i2totals[num_samples] += int(l_vals[count_col])
@@ -188,7 +181,7 @@ def main():
                                 i2counts[num_samples][tax_name] += int(l_vals[count_col])
                                 # sys.stdout.write("%s\t%s\t%i\n" % (f, tax_name, int(l_vals[count_col])))
                     else:
-                        if l_vals[taxlvl_col] == "G": # TODO: what if it is G1????
+                        if l_vals[taxlvl_col][0] == args.lvl or args.lvl == "all": # TODO: what if it is G1?
                             # TODO: cant do this because of broken bracken files: tax_id = int(l_vals[categ_col])
                             tax_id = l_vals[categ_col]
                             genus[num_samples][tax_id] = l_vals[0]
@@ -201,7 +194,7 @@ def main():
             num_samples += 1
     #################################################
     #STEP 2: CALCULATE BRAY-CURTIS DISSIMILARITIES
-    sys.stdout.write(">>STEP 2: COMPARING SAMPLES TO CALCULATE DISSIMILARITIES\n")
+    #sys.stdout.write(">>STEP 2: COMPARING SAMPLES TO CALCULATE DISSIMILARITIES\n")
 
     bc = np.zeros((num_samples,num_samples))
     for i in range(0,num_samples):
@@ -214,7 +207,7 @@ def main():
                     C_ij += min(i2counts[i][cat], i2counts[j][cat])
             #Calculate bray-curtis dissimilarity
             bc_ij = 1.0 - ((2.0*C_ij)/float(i_tot+j_tot))
-            sys.stdout.write("%s\t%s\t%i\t%i\t%i\n" % (i2names[i], i2names[j], C_ij, i_tot, j_tot))
+            #sys.stdout.write("%s\t%s\t%i\t%i\t%i\n" % (i2names[i], i2names[j], C_ij, i_tot, j_tot))
             bc[i][j] = bc_ij
             bc[j][i] = bc_ij
 
@@ -224,19 +217,19 @@ def main():
     #         sys.stdout.write("%i\t%s\t%i\n" % (cat, genus[i][cat], i2counts[i][cat]))
 
     #################################################
-    sys.stdout.write(">>STEP 3: PRINTING MATRIX OF BRAY_CURTIS DISSIMILARITIES\n")
-    sys.stdout.flush()
+    #sys.stdout.write(">>STEP 3: PRINTING MATRIX OF BRAY_CURTIS DISSIMILARITIES\n")
+    #sys.stdout.flush()
     #Print samples
     for i in i2names:
-        sys.stdout.write("\t#%i\t%s (%i reads)\n" % (i,i2names[i],i2totals[i]))
+        sys.stdout.write("#%i\t%s (%i reads)\n" % (i,i2names[i],i2totals[i]))
     #Print headers
-    sys.stdout.write("\tx")
+    sys.stdout.write("x")
     for i in range(num_samples):
         sys.stdout.write("\t%i" % i)
     sys.stdout.write("\n")
     #Print matrix
     for i in range(num_samples):
-        sys.stdout.write("\t%i" % i)
+        sys.stdout.write("%i" % i)
         for j in range(num_samples):
             if i <= j:
                 sys.stdout.write("\t%0.3f" % bc[i][j])
