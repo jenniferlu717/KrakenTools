@@ -64,13 +64,23 @@ import os, sys, argparse
 #   - reads classified at this level and below in the tree
 def process_kraken_report(curr_str):
     split_str = curr_str.strip().split('\t')
+    if len(split_str) < 2:
+        return []
     try:
         int(split_str[1])
     except ValueError:
         return []
     all_reads = int(split_str[1])
     lvl_reads = int(split_str[2])
-    level_type = split_str[3]
+    level_type = split_str[-2]
+    type2main = {'superkingdom':'D','phylum':'P',
+        'class':'C','order':'O','family':'F',
+        'genus':'G','species':'S'} 
+    if len(level_type) > 1:
+        if level_type in type2main:
+            level_type = type2main[level_type]
+        else:
+            level_type = '-'
     #Get name and spaces 
     spaces = 0
     name = split_str[-1]
@@ -219,6 +229,8 @@ def kreport2krona_main(report_file, out_file):
     o_file = open(out_file, 'w')
     for i in range(0,line_num):
         #Get values
+        if i not in num2path:
+            continue
         curr_path = num2path[i] 
         if len(curr_path) > 0:
             curr_reads = path2reads[curr_path[-1]] 
