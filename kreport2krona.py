@@ -72,7 +72,7 @@ def process_kraken_report(curr_str):
         return []
     all_reads = int(split_str[1])
     lvl_reads = int(split_str[2])
-    level_type = split_str[-2]
+    level_type = split_str[-3]
     type2main = {'superkingdom':'D','phylum':'P',
         'class':'C','order':'O','family':'F',
         'genus':'G','species':'S'} 
