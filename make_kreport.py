@@ -161,9 +161,10 @@ def main():
     sys.stdout.write(">> STEP 4/4: Printing report file to %s...\n" % args.out_file)
     o_file = open(args.out_file,'w')
     #Write line for unclassified reads:
-    o_file.write("%6.2f\t" % (float(taxid2counts['0'])/float(read_count)*100))
-    o_file.write("%i\t%i\t" % (taxid2counts['0'],taxid2counts['0']))
-    o_file.write('U\t0\tunclassified\n')
+    if '0'  in taxid2counts:
+        o_file.write("%6.2f\t" % (float(taxid2counts['0'])/float(read_count)*100))
+        o_file.write("%i\t%i\t" % (taxid2counts['0'],taxid2counts['0']))
+        o_file.write('U\t0\tunclassified\n')
     #Get remaining lines 
     parse_nodes = [root_node]
     while len(parse_nodes) > 0:
