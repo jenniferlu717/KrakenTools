@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 ####################################################################
 #kreport2mpa.py converts a Kraken-style report into mpa [MetaPhlAn) format
 #Copyright (C) 2017-2020 Jennifer Lu, jennifer.lu717@gmail.com

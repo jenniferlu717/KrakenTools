@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 ################################################################
 #bray_curtis.py takes multiple reports of classifications or
 #abundances and calculates a matrix of bray-curtis dissimilarity
