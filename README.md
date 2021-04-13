@@ -55,6 +55,7 @@ taxonomy ID. Additional options are specified below.
 Optional:
 *   `-o2, --output2 OUTPUT.FASTA.............`second output FASTA/Q file with extracted seqs (for paired reads)
 *   `--fastq-output..........................`Instead of producing FASTA files, print FASTQ files (requires FASTQ input)
+*   `--gzip-output...........................`Gzip output
 *   `--exclude...............................`Instead of finding reads matching specified taxids, finds reads NOT matching specified taxids.
 *   `-r, --report MYFILE.KREPORT.............`Kraken report file (required if specifying --include-children or --include-parents)
 *   `--include-children......................`include reads classified at more specific levels than specified taxonomy ID levels. 

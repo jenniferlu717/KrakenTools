@@ -172,6 +172,8 @@ def main():
     parser.add_argument('--fastq-output', dest='fastq_out', required=False,
         action='store_true',default=False,
         help='Print output FASTQ reads [requires input FASTQ, default: output is FASTA]')
+    parser.add_argument('--gzip-output', dest='gzip_output', required=False,
+        action='store_true', default=False)
     parser.set_defaults(append=False)
 
     args=parser.parse_args()
@@ -343,13 +345,24 @@ def main():
     sys.stdout.flush()
     #Open output file
     if (args.append):
-        o_file = open(args.output_file, 'a')
-        if args.output_file2 != '':
-            o_file2 = open(args.output_file2, 'a')
+        if not args.gzip_output:
+            o_file = open(args.output_file, 'a')
+            if args.output_file2 != '':
+                o_file2 = open(args.output_file2, 'a')
+        else:
+            o_file = gzip.open(args.output_file, 'wta')
+            if args.output_file2 != '':
+                o_file2 = gzip.open(args.output_file2, 'wta')
     else:
-        o_file = open(args.output_file, 'w')
-        if args.output_file2 != '':
-            o_file2 = open(args.output_file2, 'w')
+        if not args.gzip_output:
+            o_file = open(args.output_file, 'w')
+            if args.output_file2 != '':
+                o_file2 = open(args.output_file2, 'w')
+        else:
+            o_file = gzip.open(args.output_file, 'wt')
+            if args.output_file2 != '':
+                o_file2 = gzip.open(args.output_file2, 'wt')
+ 
     #Process SEQUENCE 1 file 
     count_seqs = 0
     count_output = 0
