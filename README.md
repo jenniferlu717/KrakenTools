@@ -41,7 +41,7 @@ Users can make scripts executable by running
 
 This program extract reads classified at any user-specified taxonomy IDs. User
 must specify the Kraken output file, the sequence file(s), and at least one
-taxonomy ID. Additional options are specified below.
+taxonomy ID. Additional options are specified below. As of April 19, 2021, this script is compatible with KrakenUniq/Kraken2Uniq reports.
 
 ## 1. extract\_kraken\_reads.py usage/options 
     
