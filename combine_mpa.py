@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 ####################################################################
 #combine_mpa.py converts multiple outputs from kreport2mpa.py
 #Copyright (C) 2020 Jennifer Lu, jennifer.lu717@gmail.com
