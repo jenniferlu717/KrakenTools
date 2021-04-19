@@ -119,8 +119,8 @@ def process_kraken_report(report_line):
     except ValueError:
         return []
     #Extract relevant information
-    level_type = l_vals[3]
-    taxid = int(l_vals[4])
+    level_type = l_vals[-3]
+    taxid = int(l_vals[-2])
     #Get spaces to determine level num
     spaces = 0
     for char in l_vals[-1]:
