@@ -118,8 +118,8 @@ def process_kraken_report(curr_str):
     #Extract relevant information
     all_reads =  int(split_str[1])
     level_reads = int(split_str[2])
-    level_type = split_str[3]
-    taxid = split_str[4] 
+    level_type = split_str[-3]
+    taxid = split_str[-2] 
     #Get name and spaces
     spaces = 0
     name = split_str[-1]
