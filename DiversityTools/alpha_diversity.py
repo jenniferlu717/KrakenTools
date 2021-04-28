@@ -15,8 +15,25 @@ def berger_parkers_alpha(p):
 	print("Berger-parker's diversity: %s" %max(p))
 	return max(p)
 
+def find_d_simpson(p):
+	# sum(pi^2)
+	simp = 0
+	for i in p:
+		simp += i**2
+	return simp	
 
-def fischers_alpha():	
+def simpsons_alpha(p):
+	# simpsons = 1 - sum(pi^2)
+	simp = find_d_simpson(p)
+	print("Simpson's diversity: %s" %(1-simp))
+	return simp
+
+def inverse_simpsons_alpha(p):
+	simp = find_d_simpson(p)
+	print("Simpson's Reciprocal Index: %s" %(1/simp))
+	return 1/simp
+
+def fishers_alpha():	
 	global np
 	import numpy as np
 	from scipy.optimize import fsolve
@@ -26,7 +43,7 @@ def fischers_alpha():
 	# NOTE:
 	# if ratio of N/S > 20 then x > 0.99 (Poole,1974)
 	# x is almost always > 0.9 and never > 1.0 i.e. ~ 0.9 < x < 1.0
-	print("Fischer's index: %s" %fish[1])
+	print("Fisher's index: %s" %fish[1])
 	return fish[1]
 
 def eqn_output(z):
@@ -43,7 +60,7 @@ def main():
 	# get arguments
 	parser = argparse.ArgumentParser(description='Pick an alpha diversity.')
 	parser.add_argument('-f','--filename',dest='filename',help='bracken file with species abundance estimates')
-	parser.add_argument('-a','--alpha',dest='value',default='S',type=str,  help='type of alpha diversity to calculate S, BP or F, default = S')
+	parser.add_argument('-a','--alpha',dest='value',default='Sh',type=str,  help='type of alpha diversity to calculate Sh, BP, Si, ISi, F, default = Sh')
 	args = parser.parse_args()
 
 	f = open(args.filename)
@@ -68,17 +85,21 @@ def main():
 	
 	
 	# find the indicated alpha
-	if args.value == 'S': # calculate shannon's diversity
+	if args.value == 'Sh': # calculate shannon's diversity
 		shannons_alpha(p)
 	elif args.value == 'BP': # calculate berger-parker's dominance index
 		berger_parkers_alpha(p)
-	elif args.value == 'F': # calculate fischer's alpha
-		print("Fischer's alpha...loading")
+	elif args.value == 'Si': # calculate Simpson's alpha 
+		simpsons_alpha(p)
+	elif args.value == 'ISi': # calculate Inverse Simpson's alpha 
+		inverse_simpsons_alpha(p)
+	elif args.value == 'F': # calculate fisher's alpha
+		print("Fisher's alpha...loading")
 		global N_f
 		N_f = sum(n)
 		global S_f
 		S_f = len(n)
-		fischers_alpha()
+		fishers_alpha()
 	else:
 		print("Not a supported alpha")
 

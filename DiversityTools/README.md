@@ -40,7 +40,7 @@ alpha diversity to be calculated. Specific options are specified below.
 
 `python alpha_diversity.py`
 *   `-f, --filename MYFILE.BRACKEN..........`Bracken output file
-*   `-a, --alpha TYPE.......................`Single letter alpha diversity type (S, BP, F)
+*   `-a, --alpha TYPE.......................`Single letter alpha diversity type (Sh, BP, Si, ISi, F)
 
 ## 2. alpha\_diversity.py input file
 
@@ -64,9 +64,11 @@ By default, the program will calculate Shannon's alpha:
 
 Users can specify which type of alpha diversity from this set:
 
-*   S.......Shannon's alpha diversity
+*   Sh......Shannon's alpha diversity
 *   BP.....Berger-Parker's alpha
-*   F.......Fischer's index
+*   Si.....Simpson's diversity
+*   ISi.....Inverse Simpson's diversity
+*   F.......Fisher's index
 
 To calculate berger-parker's alpha:
 
@@ -93,4 +95,4 @@ supported for kraken and krona files), you can pass `--level S`
 
 For more information, please take a look at the help page.
 
-	phyhon beta_diversity.py --help
+	python beta_diversity.py --help
