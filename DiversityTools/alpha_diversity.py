@@ -15,45 +15,32 @@ def berger_parkers_alpha(p):
 	print("Berger-parker's diversity: %s" %max(p))
 	return max(p)
 
-def find_d_simpson(p):
-	# sum(pi^2)
-	simp = 0
-	for i in p:
-		simp += i**2
-	return simp	
+def simpsons_alpha(D):
+	# simpsons index of diversity = 1 - D
+	# D = (sum ni(ni-1))/ N*(N-1)
+	print("Simpson's index of diversity: %s" %(1-D))
+	return 1-D
 
-def simpsons_alpha(p):
-	# simpsons = 1 - sum(pi^2)
-	simp = find_d_simpson(p)
-	print("Simpson's diversity: %s" %(1-simp))
-	return simp
-
-def inverse_simpsons_alpha(p):
-	simp = find_d_simpson(p)
-	print("Simpson's Reciprocal Index: %s" %(1/simp))
-	return 1/simp
+def inverse_simpsons_alpha(D):
+	# simsons inverse = 1/D
+	print("Simpson's Reciprocal Index: %s" %(1/D))
+	return 1/D
 
 def fishers_alpha():	
 	global np
 	import numpy as np
 	from scipy.optimize import fsolve
 	
-	zGuess = np.array([1,1])
-	fish = fsolve(eqn_output,zGuess)
+	fish = fsolve(eqn_output,1)
+	
 	# NOTE:
 	# if ratio of N/S > 20 then x > 0.99 (Poole,1974)
 	# x is almost always > 0.9 and never > 1.0 i.e. ~ 0.9 < x < 1.0
-	print("Fisher's index: %s" %fish[1])
-	return fish[1]
+	print("Fisher's index: %s" %fish[0])
+	return fish
 
-def eqn_output(z):
-	x = z[0]
-	a = z[1]
-
-	F = np.empty((2))
-	F[0] = np.exp(((x-1)*(N_f/S_f))/x) + x - 1
-	F[1] = ((N_f*(1-x))/x) - a
-	return F
+def eqn_output(a):
+	return a * np.log(1+N_f/a) - S_f
 
 # Main method
 def main():
@@ -79,20 +66,22 @@ def main():
 	S = len(n) # total number of species
 	# calculate all the pi's
 	p = [] # store pi's 
+	D = 0
 	for i in n: # go through each species
-		if i != 0:
-			p.append(i/N) # p is the ni/N
+		if i != 0: # there should not be any zeros
+			p.append(i/N) # pi is the ni/N
+			D += i*(i-1)
 	
-	
+	D = D/(N*(N-1))
 	# find the indicated alpha
 	if args.value == 'Sh': # calculate shannon's diversity
 		shannons_alpha(p)
 	elif args.value == 'BP': # calculate berger-parker's dominance index
 		berger_parkers_alpha(p)
 	elif args.value == 'Si': # calculate Simpson's alpha 
-		simpsons_alpha(p)
+		simpsons_alpha(D)
 	elif args.value == 'ISi': # calculate Inverse Simpson's alpha 
-		inverse_simpsons_alpha(p)
+		inverse_simpsons_alpha(D)
 	elif args.value == 'F': # calculate fisher's alpha
 		print("Fisher's alpha...loading")
 		global N_f
