@@ -227,7 +227,7 @@ def kreport2krona_main(report_file, out_file):
     
     #WRITE OUTPUT FILE
     o_file = open(out_file, 'w')
-    for i in range(0,line_num):
+    for i in range(0,line_num+1):
         #Get values
         if i not in num2path:
             continue
