@@ -126,7 +126,7 @@ def main():
     # The outdated taxid has the same rank as the updated taxid
     with open(args.merged_file, 'r') as merged_f:
         for line in merged_f:
-            outdated_taxid, updated_taxid, *_ = line.split("\t|\t")
+            outdated_taxid, updated_taxid, *_ = [taxid.strip() for taxid in line.split("|")]
 
             rank = taxid2node[updated_taxid].level_rank
             taxid2node[outdated_taxid] = Tree(outdated_taxid, rank, parent=updated_taxid)
