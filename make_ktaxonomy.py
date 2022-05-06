@@ -124,12 +124,19 @@ def main():
     # Add outdated taxids that have been merged into updated taxids
     # as a child of the updated taxid.
     # The outdated taxid has the same rank as the updated taxid
+    updated_taxid_lookup = {}
     with open(args.merged_file, 'r') as merged_f:
         for line in merged_f:
             outdated_taxid, updated_taxid, *_ = [taxid.strip() for taxid in line.split("|")]
 
+            updated_taxid_lookup[outdated_taxid] = updated_taxid
+
             rank = taxid2node[updated_taxid].level_rank
-            taxid2node[outdated_taxid] = Tree(outdated_taxid, rank, parent=updated_taxid)
+            curr_node = Tree(outdated_taxid, rank, parent=taxid2node[updated_taxid])
+            taxid2node[outdated_taxid] = curr_node
+            taxid2node[outdated_taxid].p_taxid = updated_taxid
+
+            taxid2node[updated_taxid].add_child(taxid2node[outdated_taxid])
 
     sys.stdout.write("\r\t%i nodes read\n" % count_nodes)
     sys.stdout.flush()
@@ -206,6 +213,15 @@ def main():
             elif "scientific name" in line:
                 save_taxids[taxid].name = name
     names_f.close()
+
+    # add names to outdated taxids using their updated parent
+    for outdated_taxid, updated_taxid in updated_taxid_lookup.items():
+        try:
+            updated_name = save_taxids[updated_taxid].name
+            save_taxids[outdated_taxid].name = updated_name
+        except KeyError:
+            continue
+
     sys.stdout.write("\r\t%i/%i names found\n" % (count_names, count_final))
     sys.stdout.flush()
     #STEP 5/5: PRINT NEW TAXONOMY 
