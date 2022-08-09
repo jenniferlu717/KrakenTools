@@ -7,7 +7,7 @@
 # the same as the original kreport2mpa.py. Added lines have been commented
 # for clarity of changes. An extra argument has been added to allow for
 # use the generated mpa file as an input with Humann v3. For this,
-# use the -hm flag.
+# use the -hm or --humann_mode flag.
 # 
 # Justification for changes: Metaphlan3 bug list outputs now contain
 # two additional columns -- taxid and additional species. From what I 
