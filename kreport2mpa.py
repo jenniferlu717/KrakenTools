@@ -67,13 +67,28 @@ import os, sys, argparse
 #   - reads classified at this level and below in the tree
 def process_kraken_report(curr_str):
     split_str = curr_str.strip().split('\t')
+    if len(split_str) < 4:
+        return []
     try:
         int(split_str[1])
     except ValueError:
         return []
     percents = float(split_str[0])
     all_reads = int(split_str[1])
-    level_type = split_str[3]
+    #Extract relevant information
+    try:
+        taxid = int(l_vals[-3]) 
+        level_type = l_vals[-2]
+        map_kuniq = {'species':'S', 'genus':'G','family':'F',
+            'order':'O','class':'C','phylum':'P','superkingdom':'D',
+            'kingdom':'K'}
+        if level_type not in map_kuniq:
+            level_type = '-'
+        else:
+            level_type = map_kuniq[level_type]
+    except ValueError:
+        taxid = int(l_vals[-2])
+        level_type = split_str[-3]
     #Get name and spaces 
     spaces = 0
     name = split_str[-1]

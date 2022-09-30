@@ -114,13 +114,26 @@ def process_kraken_output(kraken_line):
 #   - level_type (type of taxonomy level - U, R, D, P, C, O, F, G, S, etc) 
 def process_kraken_report(report_line):
     l_vals = report_line.strip().split('\t')
+    if len(l_vals) < 5:
+        return []
     try:
         int(l_vals[1])
     except ValueError:
         return []
     #Extract relevant information
-    level_type = l_vals[-3]
-    taxid = int(l_vals[-2])
+    try:
+        taxid = int(l_vals[-3]) 
+        level_type = l_vals[-2]
+        map_kuniq = {'species':'S', 'genus':'G','family':'F',
+            'order':'O','class':'C','phylum':'P','superkingdom':'D',
+            'kingdom':'K'}
+        if level_type not in map_kuniq:
+            level_type = '-'
+        else:
+            level_type = map_kuniq[level_type]
+    except ValueError:
+        taxid = int(l_vals[-2])
+        level_type = l_vals[-3]
     #Get spaces to determine level num
     spaces = 0
     for char in l_vals[-1]:
@@ -130,7 +143,7 @@ def process_kraken_report(report_line):
             break
     level_num = int(spaces/2)
     return[taxid, level_num, level_type]
-#################################################################################
+################################################################################
 #Main method 
 def main():
     #Parse arguments
