@@ -1,11 +1,13 @@
 # Kraken Tools
 For news and updates, refer to the github page: https://github.com/jenniferlu717/KrakenTools/
 
-KrakenTools is a suite of scripts to be used for post-analysis of 
-Kraken/KrakenUniq/Kraken2/Bracken results. Please cite the relevant paper
-if using KrakenTools with any of the listed programs. 
+## Citation
+KrakenTools has been published on September 28, 2022 as part of a protocol paper for using the Kraken software suite. Please cite the following when using any of the included tools: 
+[Lu J, Rincon N, Wood D E, Breitwieser F P, Pockrandt C, Langmead B, Salzberg S L, Steinegger M. Metagenome analysis using the Kraken software suite. Nature Protocols, doi: 10.1038/s41596-022-00738-y (2022)]
+(https://www.nature.com/articles/s41596-022-00738-y)
 
-## Links to Kraken github pages
+KrakenTools is a suite of scripts to be used for post-analysis of Kraken/KrakenUniq/Kraken2/Bracken results. 
+Please also cite the relevant paper for usage of KrakenTools with any of the listed programs. 
 1. [Kraken 1](https://github.com/DerrickWood/kraken)
 2. [Kraken 2](https://github.com/DerrickWood/kraken2)
 3. [KrakenUniq](https://github.com/fbreitwieser/krakenuniq)
@@ -26,7 +28,8 @@ This github repository is dedicated to only the scripts provided here.
 7. [fix\_unmapped.py](#fix\_unmappedpy)
 8. [make\_ktaxonomy.py](#make\_ktaxonomypy)
 9. [make\_kreport.py](#make\_kreportpy)
-
+10. alpha\_diversity.py (see Diversity/README.md)
+11. beta\_diversity.py (see Diversity/README.md)
 # Running Scripts:
 No installation required. 
 All scripts are run on the command line as described.
