@@ -1,12 +1,14 @@
 # Kraken Tools
+KrakenTools is a suite of scripts to be used alongside the Kraken, KrakenUniq, Kraken 2, or Bracken programs. These scripts are designed to help Kraken users with downstream analysis of Kraken results. 
+
 For news and updates, refer to the github page: https://github.com/jenniferlu717/KrakenTools/
 
-## Citation
-KrakenTools has been published on September 28, 2022 as part of a protocol paper for using the Kraken software suite. Please cite the following when using any of the included tools: 
+## Citation 
+KrakenTools has been published on September 28, 2022 as part of a protocol paper for using the Kraken software suite. Please cite the following when using any KrakenTools script: 
+
 [Lu J, Rincon N, Wood D E, Breitwieser F P, Pockrandt C, Langmead B, Salzberg S L, Steinegger M. Metagenome analysis using the Kraken software suite. Nature Protocols, doi: 10.1038/s41596-022-00738-y (2022)]
 (https://www.nature.com/articles/s41596-022-00738-y)
 
-KrakenTools is a suite of scripts to be used for post-analysis of Kraken/KrakenUniq/Kraken2/Bracken results. 
 Please also cite the relevant paper for usage of KrakenTools with any of the listed programs. 
 1. [Kraken 1](https://github.com/DerrickWood/kraken)
 2. [Kraken 2](https://github.com/DerrickWood/kraken2)
