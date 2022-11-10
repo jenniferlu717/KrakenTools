@@ -34,7 +34,7 @@ Users can make scripts executable by running
 
 This program calculates alpha diversity, from the Bracken abundance estimation file.
 User must specify Bracken output file, and type of
-alpha diversity to be calculated. Specific options are specified below.
+alpha diversity to be calculated. Specific options are specified below. 
 
 ## 1. alpha\_diversity.py usage/options
 
@@ -54,7 +54,9 @@ specifically for Abundance Estimation. Example format:
         Streptococcus pneumoniae 1313        S           ...         ....       3       0.000000                                                                                                            
         Bordetella pertussis     520         S           ...         ....       20      0.000002
 
-Link to Brack github for reference: [Bracken](https://github.com/jenniferlu717/Bracken)
+Link to Bracken github for reference: [Bracken](https://github.com/jenniferlu717/Bracken)
+
+Note: This example shows the file format from Bracken at the species level, but users can specify a different level for abundance estimation with Bracken.
 
 ## 4. alpha\_diversity.py alpha type input
 
