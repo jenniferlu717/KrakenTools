@@ -135,7 +135,7 @@ This script combines multiple Kraken reports into a combined report file.
 
 ## 1. combine\_kreports.py usage/options
     
-`python complete_kreports.py`
+`python combine_kreports.py`
 *    `-r 1.KREPORT 2.KREPORT........................`Kraken-style reports to combine 
 *    `-o COMBINED.KREPORT...........................`Output file 
 
