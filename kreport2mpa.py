@@ -77,8 +77,8 @@ def process_kraken_report(curr_str):
     all_reads = int(split_str[1])
     #Extract relevant information
     try:
-        taxid = int(l_vals[-3]) 
-        level_type = l_vals[-2]
+        taxid = int(split_str[-3]) 
+        level_type = split_str[-2]
         map_kuniq = {'species':'S', 'genus':'G','family':'F',
             'order':'O','class':'C','phylum':'P','superkingdom':'D',
             'kingdom':'K'}
@@ -87,7 +87,7 @@ def process_kraken_report(curr_str):
         else:
             level_type = map_kuniq[level_type]
     except ValueError:
-        taxid = int(l_vals[-2])
+        taxid = int(split_str[-2])
         level_type = split_str[-3]
     #Get name and spaces 
     spaces = 0
