@@ -79,7 +79,7 @@ def process_kraken_report(curr_str):
     try:
         taxid = int(split_str[-3]) 
         level_type = split_str[-2]
-        map_kuniq = {'species':'S', 'genus':'G','family':'F',
+        map_kuniq = {'strain': 'T', 'species':'S', 'genus':'G','family':'F',
             'order':'O','class':'C','phylum':'P','superkingdom':'D',
             'kingdom':'K'}
         if level_type not in map_kuniq:
@@ -138,7 +138,7 @@ def main():
         o_file.write("#Classification\t" + os.path.basename(args.r_file) + "\n")
     
     #Read through report file 
-    main_lvls = ['R','K','D','P','C','O','F','G','S']
+    main_lvls = ['R','K','D','P','C','O','F','G','S','S1','T']
     for line in r_file:
         report_vals = process_kraken_report(line)
         #If header line, skip
@@ -155,6 +155,8 @@ def main():
             level_type = "k"
         elif level_type == "D":
             level_type = "k"
+        elif level_type == "S1":
+            level_type = "t"
         level_str = level_type.lower() + "__" + name
         #Determine full string to add
         if prev_lvl_num == -1:
