@@ -158,8 +158,8 @@ def main():
     
 
     #Initialize combined values 
-    main_lvls = ['U','R','D','K','P','C','O','F','G','S']
-    map_lvls = {'kingdom':'K', 'superkingdom':'D','phylum':'P','class':'C','order':'O','family':'F','genus':'G','species':'S'}
+    main_lvls = ['U','R','D','K','P','C','O','F','G','S', 'S1', 'T']
+    map_lvls = {'kingdom':'K', 'superkingdom':'D','phylum':'P','class':'C','order':'O','family':'F','genus':'G','species':'S', 'strain': 'T'}
     count_samples = 0
     num_samples = len(args.r_files)
     sample_names = args.s_names
