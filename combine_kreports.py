@@ -216,7 +216,7 @@ def main():
                 continue
             #Tree Root 
             if taxid == '1': 
-                if count_samples == 1:
+                if root_node == -1:
                     root_node = Tree(name, taxid, level_num, 'R', 0,0)
                     taxid2node[taxid] = root_node 
                 root_node.add_reads(count_samples, all_reads, level_reads) 
