@@ -222,7 +222,9 @@ Optional:
 *    `--no-intermediate-ranks...........`[default] only output standard levels [D,P,C,O,F,G,S] 
 *    `--intermediate-ranks..............`include non-standard levels
 *    `--read-count......................`[default] use read count for output
-*    `--percentages.....................`use percentage of total reads for output 
+*    `--percentages.....................`use percentage of total reads for output
+*    `--remove-spaces...................`[default] replace spaces with underscores in each taxon
+*    `--keep-spaces.....................`keep spaces in each taxon
 
 ## 2. kreport2mpa.py example usage
     
