@@ -154,7 +154,7 @@ def main():
         elif level_type == "K":
             level_type = "k"
         elif level_type == "D":
-            level_type = "k"
+            level_type = "d"
         level_str = level_type.lower() + "__" + name
         #Determine full string to add
         if prev_lvl_num == -1:
