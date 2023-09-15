@@ -65,7 +65,7 @@ import os, sys, argparse
 #   - classification/genome name
 #   - level name (U, -, D, P, C, O, F, G, S)
 #   - reads classified at this level and below in the tree
-def process_kraken_report(curr_str):
+def process_kraken_report(curr_str, remove_spaces):
     split_str = curr_str.strip().split('\t')
     if len(split_str) < 4:
         return []
@@ -98,7 +98,8 @@ def process_kraken_report(curr_str):
             spaces += 1
         else:
             break
-    name = name.replace(' ','_')
+    if remove_spaces == True:
+        name = name.replace(' ','_')
     #Determine level based on number of spaces
     level_num = spaces/2
     return [name, level_num, level_type, all_reads, percents]
@@ -126,6 +127,13 @@ def main():
     parser.add_argument('--no-intermediate-ranks', action='store_false',
         dest='x_include', default=False, required=False,
         help='Do not include non-traditional taxonomic ranks in output [default]')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--remove-spaces', action='store_true',
+        dest='remove_spaces', default=True, required=False,
+        help='Replace space with underscore in taxon name [default]')
+    group.add_argument('--keep-spaces', action='store_false',
+        dest='remove_spaces', default=False, required=False,
+        help='Do not replace space with underscore in taxon name')
     args=parser.parse_args()
 
     #Process report file and output 
@@ -140,7 +148,7 @@ def main():
     #Read through report file 
     main_lvls = ['R','K','D','P','C','O','F','G','S']
     for line in r_file:
-        report_vals = process_kraken_report(line)
+        report_vals = process_kraken_report(line, args.remove_spaces)
         #If header line, skip
         if len(report_vals) < 5: 
             continue
@@ -154,7 +162,7 @@ def main():
         elif level_type == "K":
             level_type = "k"
         elif level_type == "D":
-            level_type = "k"
+            level_type = "d"
         level_str = level_type.lower() + "__" + name
         #Determine full string to add
         if prev_lvl_num == -1:
