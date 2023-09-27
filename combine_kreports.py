@@ -118,8 +118,19 @@ def process_kraken_report(curr_str):
     #Extract relevant information
     all_reads =  int(split_str[1])
     level_reads = int(split_str[2])
-    level_type = split_str[-3]
-    taxid = split_str[-2] 
+    try:
+        level_type = split_str[-3]
+        taxid = int(split_str[-2])
+    except ValueError:
+        taxid = int(split_str[-3])
+        level_type = split_str[-2]
+        map_kuniq = {'species':'S','genus':'G','family':'F',
+            'order':'O','class':'C','phylum':'P','superkingdom':'D',
+            'kingdom':'K'}
+        if level_type not in map_kuniq:
+            level_type = '-'
+        else:
+            level_type= map_kuniq[level_type]
     #Get name and spaces
     spaces = 0
     name = split_str[-1]
@@ -215,7 +226,7 @@ def main():
                 u_reads[count_samples] = level_reads 
                 continue
             #Tree Root 
-            if taxid == '1': 
+            if taxid == 1: 
                 if count_samples == 1:
                     root_node = Tree(name, taxid, level_num, 'R', 0,0)
                     taxid2node[taxid] = root_node 
@@ -265,18 +276,22 @@ def main():
         o_file.write("#perc\ttot_all\ttot_lvl")
         if not args.c_only:
             for i in id2names:
-                o_file.write("\t%s_all" % i)
-                o_file.write("\t%s_lvl" % i)
+                o_file.write("\t%s_all" % id2names[i])
+                o_file.write("\t%s_lvl" % id2names[i])
         o_file.write("\tlvl_type\ttaxid\tname\n")
     #################################################
     #STEP 3: PRINT TREE
     sys.stdout.write(">>STEP 3: PRINTING REPORT\n")
     #Print line for unclassified reads
     o_file.write("%0.4f\t" % (float(u_reads[0])/float(total_reads[0])*100))
-    for i in u_reads:
+    for i in range(num_samples):
         if i == 0 or (i > 0 and not args.c_only):
-            o_file.write("%i\t" % u_reads[i])
-            o_file.write("%i\t" % u_reads[i])
+            if i not in u_reads:
+                o_file.write("0\t")
+                o_file.write("0\t")
+            else:
+                o_file.write("%i\t" % u_reads[i])
+                o_file.write("%i\t" % u_reads[i])
     o_file.write("U\t0\tunclassified\n")
     #Print for all remaining reads 
     all_nodes = [root_node]

@@ -2,10 +2,10 @@
 ######################################################################
 #extract_kraken_reads.py takes in a kraken-style output and kraken report
 #and a taxonomy level to extract reads matching that level
-#Copyright (C) 2019-2020 Jennifer Lu, jennifer.lu717@gmail.com
+#Copyright (C) 2019-2023 Jennifer Lu, jennifer.lu717@gmail.com
 #
 #This file is part of KrakenTools
-#KrakenTools is free software; oyu can redistribute it and/or modify
+#KrakenTools is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
 #the Free Software Foundation; either version 3 of the license, or
 #(at your option) any later version.
