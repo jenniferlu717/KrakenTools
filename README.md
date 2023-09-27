@@ -32,8 +32,11 @@ This github repository is dedicated to only the scripts provided here.
 9. [make\_kreport.py](#make\_kreportpy)
 10. alpha\_diversity.py (see Diversity/README.md)
 11. beta\_diversity.py (see Diversity/README.md)
+# Dependencies 
+Some of the scripts in this package will require installation of Biopython: https://biopython.org/. Otherwise, scripts should work with installation of python. 
+
 # Running Scripts:
-No installation required. 
+No installation required.
 All scripts are run on the command line as described.
 
 Users can make scripts executable by running
