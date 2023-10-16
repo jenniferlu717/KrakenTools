@@ -284,7 +284,7 @@ def main():
     sys.stdout.write(">>STEP 3: PRINTING REPORT\n")
     #Print line for unclassified reads
     o_file.write("%0.4f\t" % (float(u_reads[0])/float(total_reads[0])*100))
-    for i in range(num_samples):
+    for i in range(num_samples+1):
         if i == 0 or (i > 0 and not args.c_only):
             if i not in u_reads:
                 o_file.write("0\t")
