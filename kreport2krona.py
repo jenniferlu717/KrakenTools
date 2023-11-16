@@ -72,7 +72,19 @@ def process_kraken_report(curr_str):
         return []
     all_reads = int(split_str[1])
     lvl_reads = int(split_str[2])
-    level_type = split_str[-3]
+    
+    try:
+        taxid = int(split_str[-3])
+        level_type = split_str[-2]
+        map_kuniq = {'species':'S', 'genus':'G', 'family':'F',
+            'order':'O','class':'C','phylum':'P','superkingdom':'D',
+            'kingdom':'K'}
+        if level_type not in map_kuniq:
+            level_type = '-'
+        else:
+            level_type = map_kuniq[level_type]
+    except ValueError:
+        level_type = split_str[-3]
     type2main = {'superkingdom':'D','phylum':'P',
         'class':'C','order':'O','family':'F',
         'genus':'G','species':'S'} 
