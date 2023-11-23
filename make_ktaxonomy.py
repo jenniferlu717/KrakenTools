@@ -28,7 +28,8 @@
 #
 #Required Parameters:
 #   --nodes X...........................nodes.dmp file
-#   --names X...........................names.dmp file 
+#   --names X...........................names.dmp file
+#   --merged X..........................merged.dmp file
 #   --seqid2taxid X.....................seqid2taxid.map file
 #   -o, --output X......................output file with taxonomy info
 #Optional Parameters:
@@ -67,6 +68,7 @@ def main():
         help='nodes.dmp file from taxonomy')
     parser.add_argument('--names',dest='names_file', required=True,
         help='names.dmp file from taxonomy')
+    parser.add_argument('--merged', dest='merged_file', required=True, help='merged.dmp file from taxonomy')
     parser.add_argument('--seqid2taxid',dest='s2t_file', required=True,
         help='seqid2taxid.map file')
     parser.add_argument('-o','--output',dest='out_file', required=True,
@@ -87,11 +89,11 @@ def main():
     #STEP 1/5: PARSE NODES.DMP FILE
     root_node = -1
     taxid2node = {} 
-    p_notsaved = {} 
+    p_notsaved = {}
     nodes_f = open(args.nodes_file,'r')
     sys.stdout.write(">> STEP 1/5: Reading %s\n" % args.nodes_file)
     sys.stdout.write("\t%0 nodes read")
-    count_nodes = 0 
+    count_nodes = 0
     for line in nodes_f:
         count_nodes += 1
         if (count_nodes % 100) == 0:
@@ -116,8 +118,26 @@ def main():
         else:
             #parent not linked
             p_notsaved[curr_taxid] = curr_node
-            curr_node.p_taxid = parent_taxid 
-    nodes_f.close() 
+            curr_node.p_taxid = parent_taxid
+    nodes_f.close()
+
+    # Add outdated taxids that have been merged into updated taxids
+    # as a child of the updated taxid.
+    # The outdated taxid has the same rank as the updated taxid
+    updated_taxid_lookup = {}
+    with open(args.merged_file, 'r') as merged_f:
+        for line in merged_f:
+            outdated_taxid, updated_taxid, *_ = [taxid.strip() for taxid in line.split("|")]
+
+            updated_taxid_lookup[outdated_taxid] = updated_taxid
+
+            rank = taxid2node[updated_taxid].level_rank
+            curr_node = Tree(outdated_taxid, rank, parent=taxid2node[updated_taxid])
+            taxid2node[outdated_taxid] = curr_node
+            taxid2node[outdated_taxid].p_taxid = updated_taxid
+
+            taxid2node[updated_taxid].add_child(taxid2node[outdated_taxid])
+
     sys.stdout.write("\r\t%i nodes read\n" % count_nodes)
     sys.stdout.flush()
     #Fix parents
@@ -193,6 +213,15 @@ def main():
             elif "scientific name" in line:
                 save_taxids[taxid].name = name
     names_f.close()
+
+    # add names to outdated taxids using their updated parent
+    for outdated_taxid, updated_taxid in updated_taxid_lookup.items():
+        try:
+            updated_name = save_taxids[updated_taxid].name
+            save_taxids[outdated_taxid].name = updated_name
+        except KeyError:
+            continue
+
     sys.stdout.write("\r\t%i/%i names found\n" % (count_names, count_final))
     sys.stdout.flush()
     #STEP 5/5: PRINT NEW TAXONOMY 
