@@ -217,7 +217,6 @@ def main():
         prev_node = -1
         for line in r_file:
             #extract values
-            print(line)
             report_vals = process_kraken_report(line)
             if len(report_vals) == 0:
                 continue
