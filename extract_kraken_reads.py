@@ -217,6 +217,7 @@ def main():
         prev_node = -1
         for line in r_file:
             #extract values
+            print(line)
             report_vals = process_kraken_report(line)
             if len(report_vals) == 0:
                 continue
@@ -224,7 +225,7 @@ def main():
             if taxid == 0:
                 continue 
             #tree root
-            if taxid == 1:
+            if taxid == 1 and prev_node == -1:
                 level_id = 'R'
                 root_node = Tree(taxid, level_num, level_id)
                 prev_node = root_node
@@ -236,7 +237,7 @@ def main():
             while level_num != (prev_node.level_num + 1):
                 prev_node = prev_node.parent 
             #determine correct level ID 
-            if level_id == '-' or len(level_id) > 1:
+            if (level_id in ['-','']) or len(level_id) > 1:
                 if prev_node.level_id in main_lvls:
                     level_id = prev_node.level_id + '1'
                 else:
