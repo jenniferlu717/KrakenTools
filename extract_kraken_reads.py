@@ -112,7 +112,7 @@ def process_kraken_output(kraken_line):
 #   - taxonomy ID 
 #   - level number (number of spaces before name)
 #   - level_type (type of taxonomy level - U, R, D, P, C, O, F, G, S, etc) 
-def process_kraken_report(report_line):
+def process_kraken_report_old(report_line):
     l_vals = report_line.strip().split('\t')
     if len(l_vals) < 5:
         return []
@@ -122,7 +122,7 @@ def process_kraken_report(report_line):
         return []
     #Extract relevant information
     try:
-        taxid = int(l_vals[-3]) 
+        taxid = int(l_vals[-3])
         level_type = l_vals[-2]
         map_kuniq = {'species':'S', 'genus':'G','family':'F',
             'order':'O','class':'C','phylum':'P','superkingdom':'D',
@@ -135,6 +135,32 @@ def process_kraken_report(report_line):
         taxid = int(l_vals[-2])
         level_type = l_vals[-3]
     #Get spaces to determine level num
+    spaces = 0
+    for char in l_vals[-1]:
+        if char == ' ':
+            spaces += 1
+        else:
+            break
+    level_num = int(spaces/2)
+    return[taxid, level_num, level_type]
+
+def process_kraken_report(report_line):
+    l_vals = report_line.strip().split('\t')
+    if len(l_vals) < 5:
+        return []
+    try:
+        int(l_vals[1])
+    except ValueError:
+        return[]
+    taxid = int(l_vals[-2])
+    level_type = l_vals[-3]
+    map_kuniq = {'species': 'S', 'genus': 'G', 'family': 'F',
+                 'order': 'O', 'class': 'C', 'phylum': 'P', 'superkingdom': 'D',
+                 'kingdom': 'K'}
+    if (len(level_type) == 0) or (level_type[0] not in map_kuniq):
+        level_type = '-'
+    else:
+        level_type = map_kuniq[level_type]
     spaces = 0
     for char in l_vals[-1]:
         if char == ' ':
@@ -224,7 +250,7 @@ def main():
             if taxid == 0:
                 continue 
             #tree root
-            if taxid == 1:
+            if taxid == 1 and prev_node == -1:
                 level_id = 'R'
                 root_node = Tree(taxid, level_num, level_id)
                 prev_node = root_node
@@ -236,7 +262,7 @@ def main():
             while level_num != (prev_node.level_num + 1):
                 prev_node = prev_node.parent 
             #determine correct level ID 
-            if level_id == '-' or len(level_id) > 1:
+            if (level_id in ['-','']) or len(level_id) > 1:
                 if prev_node.level_id in main_lvls:
                     level_id = prev_node.level_id + '1'
                 else:
