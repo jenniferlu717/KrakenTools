@@ -328,7 +328,7 @@ def main():
     first = s_file1.readline()
     if len(first) == 0:
         sys.stderr.write("ERROR: sequence file's first line is blank\n")
-        sys.exit(1)
+        sys.exit(74)
     if first[0] == ">":
         filetype = "fasta"
     elif first[0] == "@":
