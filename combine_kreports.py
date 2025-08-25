@@ -54,6 +54,7 @@
 #   - main
 #   - process_kraken_report
 ####################################################################
+import gzip
 import os, sys, argparse
 import operator
 from time import gmtime 
@@ -208,8 +209,11 @@ def main():
         sys.stdout.write("\r\t%i/%i samples processed" % (count_samples, num_samples))
         sys.stdout.flush()
         id2files[count_samples] = r_file
-        #Open File 
-        curr_file = open(r_file,'r')
+        #Open File
+        if r_file.endswith(".gz"):
+            curr_file = gzip.open(r_file,'rt')
+        else:
+            curr_file = open(r_file, 'r')
         for line in curr_file: 
             report_vals = process_kraken_report(line)
             if len(report_vals) < 5:
