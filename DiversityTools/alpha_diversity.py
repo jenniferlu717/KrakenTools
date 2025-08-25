@@ -8,6 +8,9 @@ def shannons_alpha(p):
 	for i in p:
 		h.append(i * math.log(i))
 	print("Shannon's diversity: %s" %(-1 *sum(h)))
+	# Comparison of different communities can be made if we normalize the Shannons by the maximum, It will take a
+	# value between 0 and 1. Evenness index = 1 means total evenness.
+	print("Normalized Shannon's diversity (Evenness index): %s" % ((-1 *sum(h)) / math.log((len(p)))))
 	return (-1 *sum(h))
 
 def berger_parkers_alpha(p):
